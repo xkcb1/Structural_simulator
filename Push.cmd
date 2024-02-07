@@ -17,6 +17,6 @@ git remote add origin https://github.com/xkcb1/Structural_simulator.git
 REM 提交更改
 
 REM 推送更改到GitHub
-git push origin master
+git push -f origin master
 
 endlocal
