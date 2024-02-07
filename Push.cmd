@@ -9,11 +9,11 @@ set "day=%datetime:~6,2%"
 
 git init
 git add .
+git commit -m "Update on %year%-%month%-%day%"
 REM 关联远程仓库
-git remote add origin github.com/xkcb1/Structural_simulator.git
+git remote add origin https://github.com/xkcb1/Structural_simulator.git
 
 REM 提交更改
-git commit -m "Update on %year%-%month%-%day%"
 
 REM 推送更改到GitHub
 git push origin master
