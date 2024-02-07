@@ -11,6 +11,7 @@ git init
 git add .
 git commit -m "Update on %year%-%month%-%day%"
 REM 关联远程仓库
+git remote remove origin
 git remote add origin https://github.com/xkcb1/Structural_simulator.git
 
 REM 提交更改
