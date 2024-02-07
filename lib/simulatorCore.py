@@ -57,6 +57,8 @@ class StructureSimulatorCore:
                              '/').split('/')[:-1])
         self.NAMESPACE = self.Structure.path.replace(
             '\\', '/').split('/')[-2]
+        self.NbtFilePalette = []  # Nbt文件映射表储存列表
+        self.NbtFilePalette_Count = 0
 
     def Generate(self, nbt_file: NbtFile, similator_count: int, pos: np.ndarray, offset: int):
         '''
@@ -68,6 +70,7 @@ class StructureSimulatorCore:
         if similator_count > self.Structure.size:
             return
         nbt_file.pos = pos
+        # 放进resault里
         self.Resault[str(similator_count)].append((nbt_file.name, pos, offset))
         # 准备确定标志位和填充标志位
         if self._3d_world_.fill(pos, nbt_file.size, nbt_file.name, similator_count) == False:

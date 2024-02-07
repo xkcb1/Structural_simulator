@@ -1,3 +1,4 @@
+import dask.array as da
 import json
 import random
 from typing import *
@@ -484,90 +485,54 @@ legacy_single_pool_element不会生成结构模板中的空气方块，
 
 
 class World:
-    def __init__(self):
-        self._World_ = []
+    def __init__(self, shape=(0, 0, 0, 3)):
+        self._World_ = da.full(shape, fill_value=-1, dtype=int)
 
-    @typing.overload
-    def fill(self, pos: tuple[int, int, int], size: tuple[int, int, int], NbtFileName: str, ColorIndex: int) -> bool:
+    def fill(self, pos: tuple[int, int, int], size: tuple[int, int, int], NbtFileName: int, blockState: int, ColorIndex: int) -> bool:
         ...
 
-    @typing.overload
-    def fill(self, x: int, y: int, z: int, dx: int, dy: int, dz: int, NbtFileName: str, ColorIndex: int) -> bool:
+    def fill(self, x: int, y: int, z: int, dx: int, dy: int, dz: int, NbtFileName: int, blockState: int, ColorIndex: int) -> bool:
         ...
 
-    def fill(self, *args: Union[tuple[int, int, int], int, str]) -> bool:
-        if len(args) == 4 or len(args) == 8:
-            if len(args) == 4:
-                pos, size, NbtFileName, ColorIndex = args
-                x, y, z = pos
-                dx, dy, dz = x + size[0]-1, y + size[1]-1, z + size[2]-1
-            elif len(args) == 8:
-                x, y, z, dx, dy, dz, NbtFileName, ColorIndex = args
-            if self.testforblocks(x, y, z, dx, dy, dz) == False:
-                # 如果检查是否重叠为False：没有重叠，则填充并且返回填充成功True
-                self._World_.append(
-                    {
-                        "name": NbtFileName,
-                        "position": (x, y, z, dx, dy, dz),
-                        "color": ColorIndex,
-                    }
-                )
-                return True
-            else:
-                # 否则返回False填充失败
-                return False
-        else:
-            raise ValueError("Invalid arguments")
-
-    def setblock(self, x: int, y: int, z: int, blockName: str, ColorIndex: int):
-        self._World_.append(
-            {
-                "name": blockName,
-                "position": (x, y, z, x+1, y+1, z+1),
-                "color": ColorIndex,
-            }
-        )
-
-    @typing.overload
     def testforblocks(self, pos: tuple[int, int, int], size: tuple[int, int, int]) -> bool:
         ...
 
-    @typing.overload
     def testforblocks(self, x: int, y: int, z: int, dx: int, dy: int, dz: int) -> bool:
         ...
 
-    def testforblocks(self, *args: Union[tuple[int, int, int], int]) -> bool:
-        '''
-        检查给定区域内是否有重叠
-        '''
+    def fill(self, *args):
+        if len(args) == 5 or len(args) == 9:
+            if len(args) == 5:
+                pos, size, NbtFileName, blockState, ColorIndex = args
+                x, y, z = pos
+                dx, dy, dz = x + size[0], y + size[1], z + size[2]
+            elif len(args) == 9:
+                x, y, z, dx, dy, dz, NbtFileName, blockState, ColorIndex = args
+            if not self.testforblocks(x, y, z, dx, dy, dz):
+                # 如果检查是否重叠为 False：没有重叠，则填充并返回填充成功 True
+                self._World_[x:dx, y:dy, z:dz, 0] = ColorIndex
+                self._World_[x:dx, y:dy, z:dz, 1] = NbtFileName
+                self._World_[x:dx, y:dy, z:dz, 2] = blockState
+                return True
+            else:
+                # 否则返回 False 填充失败
+                return False
+        else:
+            print(Color.RED, "[!] : World -> Invalid arguments : len ",
+                             len(args), ', must be 5 or 9', Color.END, sep='')
+            raise ValueError('Invalid arguments')
+
+    def setblock(self, x, y, z, NbtFileName: int, blockState: int, ColorIndex: int):
+        self._World_[x, y, z, 0] = ColorIndex
+        self._World_[x, y, z, 1] = NbtFileName
+        self._World_[x, y, z, 2] = blockState
+
+    def testforblocks(self, *args):
         if len(args) == 2:
-            # method 1
             pos, size = args
             x, y, z = pos
             dx, dy, dz = x + size[0], y + size[1], z + size[2]
-            for NbtArea in self._World_:
-                pos = NbtArea["position"]
-                pos_x, pos_y, pos_z, pos_dx, pos_dy, pos_dz = pos
-                # 判断给定位置是否在当前元素的范围内
-                if (pos_x <= x <= pos_x + pos_dx and
-                    pos_y <= y <= pos_y + pos_dy and
-                    pos_z <= z <= pos_z + pos_dz and
-                    pos_dx >= dx and
-                    pos_dy >= dy and
-                        pos_dz >= dz):
-                    return True
-            return False
+            return (self._World_[x:dx, y:dy, z:dz] != -1).any().compute()
         elif len(args) == 6:
             x, y, z, dx, dy, dz = args
-            for NbtArea in self._World_:
-                pos = NbtArea["position"]
-                pos_x, pos_y, pos_z, pos_dx, pos_dy, pos_dz = pos
-                # 判断给定位置是否在当前元素的范围内
-                if (pos_x <= x <= pos_x + pos_dx and
-                    pos_y <= y <= pos_y + pos_dy and
-                    pos_z <= z <= pos_z + pos_dz and
-                    pos_dx >= dx and
-                    pos_dy >= dy and
-                        pos_dz >= dz):
-                    return True
-            return False
+            return (self._World_[x:dx, y:dy, z:dz] != -1).any().compute()
