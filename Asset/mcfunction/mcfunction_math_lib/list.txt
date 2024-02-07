@@ -1,0 +1,3523 @@
+﻿一.常量列表
+           #有理数
+           scoreboard players set -1 int -1
+           scoreboard players set 0 int 0
+           scoreboard players set 1 int 1
+           scoreboard players set 2 int 2
+           scoreboard players set 3 int 3
+           scoreboard players set 4 int 4
+           scoreboard players set 5 int 5
+           scoreboard players set 6 int 6
+           scoreboard players set 7 int 7
+           scoreboard players set 8 int 8
+           scoreboard players set 9 int 9
+           scoreboard players set 10 int 10
+	   scoreboard players set 32 int 32
+           scoreboard players set 100 int 100
+	   scoreboard players set 174 int 174
+           scoreboard players set 250 int 250
+           scoreboard players set 500 int 500
+           scoreboard players set 359 int 359
+           scoreboard players set 360 int 360
+           scoreboard players set 1000 int 1000
+           scoreboard players set 5000 int 5000
+	   scoreboard players set 8593 int 8593
+           scoreboard players set 10000 int 10000
+           scoreboard players set 100000 int 100000
+	   scoreboard players set 214748 int 214748
+	   scoreboard players set 572958 int 572958
+           scoreboard players set 900000 int 900000
+           scoreboard players set 1000000 int 1000000
+	   scoreboard players set 1745329 int 1745329
+           scoreboard players set 1800000 int 1800000
+           scoreboard players set 3600000 int 3600000
+	   scoreboard players set 5729577 int 5729577
+           scoreboard players set 10000000 int 10000000
+           scoreboard players set 100000000 int 100000000
+           scoreboard players set 1000000000 int 1000000000
+           scoreboard players set 1103515245 int 1103515245
+	   #无理数（放大10000倍）
+	   scoreboard players set sqr2 int 14142
+           scoreboard players set sqr3 int 17320
+           scoreboard players set sqr5 int 22360
+           scoreboard players set sqr6 int 24494
+           scoreboard players set sqr7 int 26457
+           scoreboard players set sqr10 int 31622
+           scoreboard players set sqr11 int 33166
+           scoreboard players set sqr13 int 36055
+           scoreboard players set sqr14 int 37416
+           scoreboard players set sqr15 int 38729
+           scoreboard players set sqr17 int 41231
+           scoreboard players set sqr19 int 43588
+           scoreboard players set pi int 31415
+           scoreboard players set g int 6180
+           scoreboard players set e int 27182
+           scoreboard players set 1/pi int 3183
+           scoreboard players set 1/e int 3678
+           scoreboard players set sqrpi int 17724
+           scoreboard players set sqre int 16487
+           scoreboard players set ln2 int 6931
+           scoreboard players set ln3 int 10986
+           scoreboard players set ln5 int 16094
+           scoreboard players set ln7 int 19459
+           scoreboard players set lg2 int 3010
+           scoreboard players set lg3 int 4771
+           scoreboard players set lg5 int 6989
+           scoreboard players set lg7 int 8450
+           scoreboard players set exp2 int 73890
+           scoreboard players set exp3 int 200855
+	   scoreboard players set sin15 int 2588
+           scoreboard players set cos15 int 9659
+           scoreboard players set sin18 int 3090
+           scoreboard players set cos18 int 9510
+
+二.部分变量列表
+
+1.scoreboard players get tick_mode int
+  若为0，常载模式处于关闭状态
+  若为1，常载模式处于打开状态
+
+三.函数列表
+
+*0.函数名 math:init
+
+  映射：初始化数学库
+
+     执行：
+        function math:init
+
+
+*1.函数名 math:4arccos
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-10000到10000以内整数
+
+  映射：将输入放缩0.0001倍，近似计算反余弦(角度制)，放大10000倍输出
+  
+
+      执行：
+
+        scoreboard players set input int -10000
+        function math:4arccos
+	scoreboard players get result int
+
+      输出结果为1800000
+
+
+
+*2.函数名 math:4arccot
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-2147483648到2147483647以内整数
+
+  映射：将输入放缩0.0001倍，近似计算反余切(角度制)，放大10000倍输出
+  
+
+      执行：
+
+        scoreboard players set input int -10000
+        function math:4arccot
+	scoreboard players get result int
+
+      输出结果为449999
+
+
+
+*3.函数名 math:4arcsin
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-10000到10000以内整数
+
+  映射：将输入放缩0.0001倍，近似计算反正弦(角度制)，放大10000倍输出
+  
+
+      执行：
+
+        scoreboard players set input int -10000
+        function math:4arcsin
+	scoreboard players get result int
+
+      输出结果为-900000
+
+
+*4.函数名 math:4arctan
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-2147483648到2147483647以内整数
+
+  映射：将输入放缩0.0001倍，近似计算反正切(角度制)，放大10000倍输出
+  
+
+      执行：
+
+        scoreboard players set input int -10000
+        function math:4arctan
+	scoreboard players get result int
+
+      输出结果为-450000
+
+
+*5.函数名 math:4cos
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-2147483648到2147483647以内整数
+
+  映射：将输入(角度制)放缩0.0001倍，近似计算余弦，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 450000
+        function math:4cos
+	scoreboard players get result int
+
+      输出结果为7071
+
+*6.函数名 math:4cot
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-2147483648到2147483647以内整数
+
+  映射：将输入(角度制)放缩0.0001倍，近似计算余切，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 450000
+        function math:4cot
+	scoreboard players get result int
+
+      输出结果为10000
+
+    
+*7.函数名 math:4tan
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-2147483648到2147483647以内整数
+
+  映射：将输入(角度制)放缩0.0001倍，近似计算正切，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 450000
+        function math:4tan
+	scoreboard players get result int
+
+      输出结果为10000
+
+
+*8.函数名 math:4sin
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-2147483648到2147483647以内整数
+
+  映射：将输入(角度制)放缩0.0001倍，近似计算正弦，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 450000
+        function math:4sin
+	scoreboard players get result int
+
+      输出结果为7071
+
+
+*9.函数名 math:4sqrt
+  输入：input int
+
+  输出：result int
+
+  输入取值范围：-1000000000到1000000000以内整数
+
+  映射：将输入取绝对值，近似计算算术平方根，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 4
+        function math:4sqrt
+	scoreboard players get result int
+
+      输出结果为20000
+
+
+*10.函数名 math:8sqrt-1
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：0到2147483647以内整数
+
+   映射：近似计算算术平方根，取倒数，放大100000000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 4
+        function math:8sqrt-1
+	scoreboard players get result int
+
+      输出结果为50000000
+
+
+*11.函数名 math:abs
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入取绝对值，赋值输出
+   
+
+      执行：
+
+        scoreboard players set input int -1
+        function math:abs
+	scoreboard players get result int
+
+      输出结果为1
+
+
+*12.函数名 math:random
+
+   输入：min int
+         max int
+
+   输出：random int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：若两个输入相等，两个输入的值赋值输出
+        若两个输入不相等，在两个输入之间生成伪随机整数，赋值输出
+   
+
+      执行：
+
+        scoreboard players set min int 0
+	scoreboard players set max int 2
+        function math:random
+	scoreboard players get random int
+
+      输出结果可能为1
+
+
+*13.函数名 math:oper1
+   输入：x oper
+         y oper
+         召唤物品：summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[m,n]]}}}
+
+   输出：r oper
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：使用记分板计算x^m*y^n，并将结果赋值到r oper，然后清除已召唤物品
+   
+
+      执行：
+
+        scoreboard players set x oper 1
+	scoreboard players set y oper 2
+	summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[0,2]]}}}
+        function math:oper1
+	scoreboard players get r oper
+
+      输出结果为4，带有标签tag的物品消失
+
+
+*14.函数名 math:oper2
+   输入：x oper
+         y oper
+         召唤物品：summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[m,n],[p,q]]}}}
+
+   输出：r oper
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：使用记分板计算x^m*y^n+x^p*y^q，并将结果赋值到r oper，然后清除已召唤物品
+   
+
+      执行：
+
+        scoreboard players set x oper 1
+	scoreboard players set y oper 2
+	summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[0,2],[2,0]]}}}
+        function math:oper2
+	scoreboard players get r oper
+
+      输出结果为5，带有标签tag的物品消失
+
+
+*15.函数名 math:oper3
+   输入：x oper
+         y oper
+         召唤物品：summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[m,n],[p,q],[r,s]]}}}
+
+   输出：r oper
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：使用记分板计算x^m*y^n+x^p*y^q+x^r*y^s，并将结果赋值到r oper，然后清除已召唤物品
+   
+
+      执行：
+
+        scoreboard players set x oper 1
+	scoreboard players set y oper 2
+	summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[0,2],[2,0],[0,3]]}}}
+        function math:oper3
+	scoreboard players get r oper
+
+      输出结果为13，带有标签tag的物品消失
+
+
+*16.函数名 math:oper4
+   输入：x oper
+         y oper
+         召唤物品：summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[m,n],[p,q],[r,s],[t,o]]}}}
+
+   输出：r oper
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：使用记分板计算x^m*y^n+x^p*y^q+x^r*y^s+x^t*y^o，并将结果赋值到r oper，然后清除已召唤物品
+   
+
+      执行：
+
+        scoreboard players set x oper 1
+	scoreboard players set y oper 2
+	summon item ~ ~ ~ {Tags:["oper"],Item:{id:"minecraft:glass",Count:1b,tag:{oper:[[0,2],[2,0],[0,3],[3,0]]}}}
+        function math:oper4
+	scoreboard players get r oper
+
+      输出结果为14，带有标签tag的物品消失
+
+
+*17.函数名 math:sqrt
+   输入：sqrt int
+
+   输出：sqrt int
+
+   输入取值范围：-1000000000到1000000000以内整数
+
+   映射：将输入取绝对值，近似计算算术平方根，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set sqrt int 100
+        function math:sqrt
+	scoreboard players get sqrt int
+
+      输出结果为100000
+
+
+*18.函数名 math:sqrt1
+   输入：sqrt int
+
+   输出：sqrt int
+
+   输入取值范围：-1000000000到1000000000以内整数
+
+   映射：将输入取绝对值，近似计算算术平方根，放大100倍输出
+   
+
+      执行：
+
+        scoreboard players set sqrt int 100
+        function math:sqrt1
+	scoreboard players get sqrt int
+
+      输出结果为1000
+
+
+*19.函数名 math:arc/cos
+   输入：cos int
+
+   输出：θ int
+
+   输入取值范围：-10000到10000以内整数
+
+   映射：将输入放缩0.0001倍，近似计算反余弦(角度制)，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set cos int 7071
+        function math:arc/cos
+	scoreboard players get θ int
+
+      输出结果为450005
+
+
+*20.函数名 math:arc/sin
+   输入：sin int
+
+   输出：θ int
+
+   输入取值范围：-10000到10000以内整数
+
+   映射：将输入放缩0.0001倍，近似计算反正弦(角度制)，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set cos int 7071
+        function math:arc/sin
+	scoreboard players get θ int
+
+      输出结果为449994
+
+
+*21.函数名 math:arc/cot
+   输入：cot int
+
+   输出：θ int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入放缩0.0001倍，近似计算反余切(角度制)，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set cot int 10000
+        function math:arc/cot
+	scoreboard players get θ int
+
+      输出结果为449999
+
+
+*22.函数名 math:arc/tan
+   输入：tan int
+
+   输出：θ int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入放缩0.0001倍，近似计算反正切(角度制)，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set tan int 10000
+        function math:arc/tan
+	scoreboard players get θ int
+
+      输出结果为449999
+
+
+*23.函数名 math:trif/cos
+   输入：θ int
+
+   输出：cos int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算余弦，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/cos
+	scoreboard players get cos int
+
+      输出结果为7071
+
+
+*24.函数名 math:trif/sin
+   输入：θ int
+
+   输出：sin int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算正弦，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/sin
+	scoreboard players get sin int
+
+      输出结果为7071
+
+
+*25.函数名 math:trif/cot
+   输入：θ int
+
+   输出：cot int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算余切，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/cot
+	scoreboard players get cot int
+
+      输出结果为10000
+
+
+*26.函数名 math:trif/tan
+   输入：θ int
+
+   输出：tan int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算正切，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/tan
+	scoreboard players get tan int
+
+      输出结果为10000
+
+
+*27.函数名 math:trif/sincos
+   输入：θ int
+
+   输出：cos int
+         sin int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算余弦，放大10000倍输出到cos int，近似计算正弦，放大10000倍输出到sin int
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/sincos
+	scoreboard players get sin int
+	scoreboard players get cos int
+
+      输出结果为7071
+                7071
+
+
+*28.函数名 math:trif/cos1
+   输入：θ int
+
+   输出：cos int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算余弦，放大100倍输出
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/cos
+	scoreboard players get cos int
+
+      输出结果为70
+
+
+*29.函数名 math:trif/sin1
+   输入：θ int
+
+   输出：sin int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算正弦，放大100倍输出
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/sin
+	scoreboard players get sin int
+
+      输出结果为70
+
+
+*30.函数名 math:trif/sincos1
+   输入：θ int
+
+   输出：cos int
+         sin int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似计算余弦，放大100倍输出到cos int，近似计算正弦，放大100倍输出到sin int
+   
+
+      执行：
+
+        scoreboard players set θ int 450000
+        function math:trif/sincos1
+	scoreboard players get sin int
+	scoreboard players get cos int
+
+      输出结果为70
+                70
+
+
+*31.函数名 math:rad
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：-3600000到3600000以内整数
+
+   映射：将输入(角度制)放缩0.0001倍，近似转换弧度制，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 1800000
+        function math:rad
+	scoreboard players get result int
+
+      输出结果为31415
+
+
+*32.函数名 math:degree
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：-62831到62831以内整数
+
+   映射：将输入(弧度制)放缩0.0001倍，近似转换角度制，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set input int 31415
+        function math:rad
+	scoreboard players get result int
+
+      输出结果为1799947
+
+
+*33.函数名 math:complex/arg
+   输入：r int
+         i int
+
+   输出：result int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：近似计算输入对应复数(r int为实部,i int为虚部)的幅角主值，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set r int 1
+	scoreboard players set i int 1
+        function math:complex/arg
+	scoreboard players get result int
+
+      输出结果为450000
+
+
+*34.函数名 math:complex/mod
+   输入：r int
+         i int
+
+   输出：result int
+
+   输入取值范围：-23170到23170以内整数
+
+   映射：近似计算输入对应复数(r int为实部,i int为虚部)的模长，放大10000倍输出
+   
+
+      执行：
+
+        scoreboard players set r int 1
+	scoreboard players set i int 1
+        function math:complex/mod
+	scoreboard players get result int
+
+      输出结果为14143
+
+
+*35.函数名 math:complex/mod2
+   输入：r int
+         i int
+
+   输出：result int
+
+   输入取值范围：-23170到23170以内整数
+
+   映射：近似计算输入对应复数(r int为实部,i int为虚部)的模长平方，输出
+   
+
+      执行：
+
+        scoreboard players set r int 1
+	scoreboard players set i int 1
+        function math:complex/mod2
+	scoreboard players get result int
+
+      输出结果为2
+
+
+*36.函数名 math:complex/plus
+   输入：input int
+         input1 int
+         r int
+	 i int
+
+   输出：r int
+         i int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：将原复数(r int为实部,i int为虚部)与输入复数(input int为实部,input1 int为虚部)相加，赋值给原复数
+   
+
+      执行：
+
+        scoreboard players set r int 1
+	scoreboard players set i int 1
+	scoreboard players set input int 1
+	scoreboard players set input1 int 1
+        function math:complex/plus
+	scoreboard players get r int
+	scoreboard players get i int
+
+      输出结果为2
+                2
+
+
+*37.函数名 math:complex/mult
+   输入：input int
+         input1 int
+         r int
+	 i int
+
+   输出：r int
+         i int
+
+   输入取值范围：-23170到23170以内整数
+
+   映射：将原复数(r int为实部,i int为虚部)与输入复数(input int为实部,input1 int为虚部)相乘，赋值给原复数
+   
+
+      执行：
+
+        scoreboard players set r int 1
+	scoreboard players set i int 1
+	scoreboard players set input int 1
+	scoreboard players set input1 int 1
+        function math:complex/mult
+	scoreboard players get r int
+	scoreboard players get i int
+
+      输出结果为0
+                2
+
+
+*38.函数名 math:operation/bit0/break
+   输入：input int
+
+   输出：entity @s Item.tag.bit0
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：若执行者为物品，将输入分数拆成几部分(10000进制)，存入执行者Item.tag.bit0，并将数字的符号存到最后一位（-1为负，1为非负）
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit0/break
+	tellraw @a {"nbt":"Item.tag.bit0","entity":"@e[tag=number,limit=1]"}
+	kill @e[tag=number]
+
+      输出结果为[3647,4748,21,0,0,1]
+
+
+*39.函数名 math:operation/bit1/break
+   输入：input int
+
+   输出：entity @s Item.tag.bit1
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：若执行者为物品，将输入分数拆成几部分(10000进制)，存入执行者Item.tag.bit1，并将数字的符号存到最后一位（-1为负，1为非负）
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit1/break
+	tellraw @a {"nbt":"Item.tag.bit1","entity":"@e[tag=number,limit=1]"}
+	kill @e[tag=number]
+
+      输出结果为[3647,4748,21,0,0,1]
+
+
+*40.函数名 math:operation/bit2/break
+   输入：input int
+
+   输出：entity @s Item.tag.bit2
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：若执行者为物品，将输入分数拆成几部分(10000进制)，存入执行者Item.tag.bit2，并将数字的符号存到最后一位（-1为负，1为非负）
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit2/break
+	tellraw @a {"nbt":"Item.tag.bit2","entity":"@e[tag=number,limit=1]"}
+	kill @e[tag=number]
+
+      输出结果为[3647,4748,21,0,0,1]
+
+
+*41.函数名 math:operation/bit0/show
+   输入：无
+
+   输出：聊天栏信息
+
+   输入取值范围：无
+
+   映射：若执行者为储存数字的物品，将数字显示给所有玩家
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit0/break
+	execute as @e[tag=number] run function math:operation/bit0/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,21,4748,3647
+
+
+*42.函数名 math:operation/bit1/show
+   输入：无
+
+   输出：聊天栏信息
+
+   输入取值范围：无
+
+   映射：若执行者为储存数字的物品，将数字显示给所有玩家
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit1/break
+	execute as @e[tag=number] run function math:operation/bit1/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,21,4748,3647
+
+
+*43.函数名 math:operation/bit2/show
+   输入：无
+
+   输出：聊天栏信息
+
+   输入取值范围：无
+
+   映射：若执行者为储存数字的物品，将数字显示给所有玩家
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit2/break
+	execute as @e[tag=number] run function math:operation/bit2/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,21,4748,3647
+
+
+*44.函数名 math:operation/bit0/plus
+   输入：input int
+         entity @s Item.tag.bit0
+
+   输出：entity @s Item.tag.bit0
+
+   输入取值范围：-2147483648到2147483647
+                 -21474836479999999999999999到21474836479999999999999999
+
+   映射：若执行者为储存数字的物品，将该数字与input int相加，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit0/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit0/plus
+	execute as @e[tag=number] run function math:operation/bit0/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,42,9496,7294
+
+
+*45.函数名 math:operation/bit1/plus
+   输入：input int
+         entity @s Item.tag.bit1
+
+   输出：entity @s Item.tag.bit1
+
+   输入取值范围：-2147483648到2147483647
+                 -21474836479999999999999999到21474836479999999999999999
+
+   映射：若执行者为储存数字的物品，将该数字与input int相加，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit1/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit1/plus
+	execute as @e[tag=number] run function math:operation/bit1/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,42,9496,7294
+
+
+*46.函数名 math:operation/bit2/plus
+   输入：input int
+         entity @s Item.tag.bit2
+
+   输出：entity @s Item.tag.bit2
+
+   输入取值范围：-2147483648到2147483647以内整数
+                 -21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：若执行者为储存数字的物品，将该数字与input int相加，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit2/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit2/plus
+	execute as @e[tag=number] run function math:operation/bit2/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,42,9496,7294
+
+
+*47.函数名 math:operation/bit0/mult
+   输入：input int
+         entity @s Item.tag.bit0
+
+   输出：entity @s Item.tag.bit0
+
+   输入取值范围：-2147483648到2147483647以内整数
+                 -21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：若执行者为储存数字的物品，将该数字与input int相乘，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit0/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit0/mult
+	execute as @e[tag=number] run function math:operation/bit0/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,461,1686,141,3242,609
+
+
+*48.函数名 math:operation/bit1/mult
+   输入：input int
+         entity @s Item.tag.bit1
+
+   输出：entity @s Item.tag.bit1
+
+   输入取值范围：-2147483648到2147483647以内整数
+                 -21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：若执行者为储存数字的物品，将该数字与input int相乘，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit1/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit1/mult
+	execute as @e[tag=number] run function math:operation/bit1/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,461,1686,141,3242,609
+
+
+*49.函数名 math:operation/bit2/mult
+   输入：input int
+         entity @s Item.tag.bit2
+
+   输出：entity @s Item.tag.bit2
+
+   输入取值范围：-2147483648到2147483647以内整数
+                 -21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：若执行者为储存数字的物品，将该数字与input int相乘，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit2/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit2/mult
+	execute as @e[tag=number] run function math:operation/bit2/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,461,1686,141,3242,609
+
+
+*50.函数名 math:operation/bit0/devide
+   输入：input int
+         entity @s Item.tag.bit0
+
+   输出：entity @s Item.tag.bit0
+
+   输入取值范围：-2147480000到2147480000以内整数
+                 -21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：若执行者为储存数字的物品，将该数字除以input int并取整，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit0/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit0/devide
+	execute as @e[tag=number] run function math:operation/bit0/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,0,0,1
+
+
+*51.函数名 math:operation/bit1/devide
+   输入：input int
+         entity @s Item.tag.bit1
+
+   输出：entity @s Item.tag.bit1
+
+   输入取值范围：-2147480000到2147480000以内整数
+                 -21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：若执行者为储存数字的物品，将该数字除以input int并取整，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit1/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit1/devide
+	execute as @e[tag=number] run function math:operation/bit1/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,0,0,1
+
+
+*52.函数名 math:operation/bit2/devide
+   输入：input int
+         entity @s Item.tag.bit2
+
+   输出：entity @s Item.tag.bit2
+
+   输入取值范围：-2147480000到2147480000以内整数
+                 -21474836479999999999999999到21474836479999999999999999
+
+   映射：若执行者为储存数字的物品，将该数字除以input int并取整，重新存入
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit2/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit2/devide
+	execute as @e[tag=number] run function math:operation/bit2/show
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,0,0,1
+
+
+*53.函数名 math:operation/bit0/mod
+   输入：input int
+         entity @s Item.tag.bit0
+
+   输出：entity @s Item.tag.bit0
+         result int
+
+   输入取值范围：-2147480000到2147480000以内整数
+                 -21474836479999999999999999到21474836479999999999999999
+
+   映射：若执行者为储存数字的物品，将该数字除以input int，商重新存入物品，余数输出result int
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit0/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit0/mod
+	execute as @e[tag=number] run function math:operation/bit0/show
+	scoreboard players get result int
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,0,0,1
+                0
+
+
+*54.函数名 math:operation/bit1/mod
+   输入：input int
+         entity @s Item.tag.bit1
+
+   输出：entity @s Item.tag.bit1
+         result int
+
+   输入取值范围：-2147480000到2147480000以内整数
+                 -21474836479999999999999999到21474836479999999999999999
+
+   映射：若执行者为储存数字的物品，将该数字除以input int，商重新存入物品，余数输出result int
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit1/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit1/mod
+	execute as @e[tag=number] run function math:operation/bit1/show
+	scoreboard players get result int
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,0,0,1
+                0
+
+
+*55.函数名 math:operation/bit2/mod
+   输入：input int
+         entity @s Item.tag.bit2
+
+   输出：entity @s Item.tag.bit2
+         result int
+
+   输入取值范围：-2147480000到2147480000以内整数
+                 -21474836479999999999999999到21474836479999999999999999
+
+   映射：若执行者为储存数字的物品，将该数字除以input int，商重新存入物品，余数输出result int
+   
+
+      执行：
+        
+	kill @e[tag=number]
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[],bit1:[],bit2:[],tmp:[]}},Tags:["number"]}
+	scoreboard players set input int 2147483647
+        execute as @e[tag=number] run function math:operation/bit2/break
+	scoreboard players set input int 2147483647
+	execute as @e[tag=number] run function math:operation/bit2/mod
+	execute as @e[tag=number] run function math:operation/bit2/show
+	scoreboard players get result int
+	kill @e[tag=number]
+
+      输出结果为结果是+,0,0,0,0,1
+                0
+
+
+*56.函数名 math:sort
+   输入：一些实体
+
+   输出：实体在记分板scb上的分数
+
+   输入取值范围：-2147483647到2147483647以内整数
+
+   映射：按输入实体在scb记分板上的分数，进行顺序排序，实体的序存在记分板sort
+   
+
+      执行：
+        
+	summon area_effect_cloud ~ ~ ~ {Tags:["A","sort"]}
+	summon area_effect_cloud ~ ~ ~ {Tags:["B","sort"]}
+	scoreboard players set @e[tag=A] scb 1
+	scoreboard players set @e[tag=B] scb 2
+	function math:sort
+	tellraw @a {"nbt":"Tags","entity":"@e[scores={sort=1},limit=1]"}
+	kill @e[tag=sort]
+
+      输出结果为["A","sort"]
+
+
+*57.函数名 math:sort-1
+   输入：一些实体
+
+   输出：实体在记分板scb上的分数
+
+   输入取值范围：-2147483647到2147483647以内整数
+
+   映射：按输入实体在scb记分板上的分数，进行逆序排序，实体的序存在记分板sort
+   
+
+      执行：
+        
+	summon area_effect_cloud ~ ~ ~ {Tags:["A","sort"]}
+	summon area_effect_cloud ~ ~ ~ {Tags:["B","sort"]}
+	scoreboard players set @e[tag=A] scb 1
+	scoreboard players set @e[tag=B] scb 2
+	function math:sort-1
+	tellraw @a {"nbt":"Tags","entity":"@e[scores={sort=1},limit=1]"}
+	kill @e[tag=sort]
+
+      输出结果为["B","sort"]
+
+
+*58.函数名 math:operation/bit0/0-2
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的0到2位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit0/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为300020001
+
+
+*59.函数名 math:operation/bit0/1-3
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的1到3位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit0/1-3
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为400030002
+
+
+*60.函数名 math:operation/bit0/2-4
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的2到4位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit0/2-4
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为500040003
+
+
+*61.函数名 math:operation/bit1/0-2
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的0到2位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit1:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit1/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为300020001
+
+
+*62.函数名 math:operation/bit1/1-3
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的1到3位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit1:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit1/1-3
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为400030002
+
+
+*63.函数名 math:operation/bit1/2-4
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的2到4位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit1:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit1/2-4
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为500040003
+
+
+*64.函数名 math:operation/bit2/0-2
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的0到2位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit2:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit2/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为300020001
+
+
+*65.函数名 math:operation/bit2/1-3
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的1到3位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit2:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit2/1-3
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为400030002
+
+
+*66.函数名 math:operation/bit2/2-4
+   输入：掉落物实体
+
+   输出：result int
+
+   输入取值范围：-21474836479999999999999999到21474836479999999999999999以内整数
+
+   映射：将大数的2到4位输出为记分板
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit2:[1,2,3,4,5,1]}}}
+	execute as @e[tag=tmp] run function math:operation/bit2/2-4
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为500040003
+
+
+*67.函数名 math:2sqrt
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：-1000000000到1000000000以内整数
+
+   映射：将输入取绝对值，近似开根号，放大100倍输出
+   
+
+      执行：
+        
+	scoreboard players set input int 4
+	function math:2sqrt
+	scoreboard players get result int
+
+      输出结果为200
+
+
+*68.函数名 math:complex/-1
+   输入：r int
+         i int
+
+   输出：r int
+         i int
+
+   输入取值范围：-23170到23170以内整数
+
+   映射：近似将复数取倒数，放大10000倍，输出
+   
+
+      执行：
+        
+	scoreboard players set r int 1
+	scoreboard players set i int 1
+	function math:complex/-1
+	scoreboard players get r int
+	scoreboard players get i int
+
+      输出结果为5000
+                5000
+
+
+*69.函数名 math:complex/sqrt
+   输入：r int
+         i int
+
+   输出：r int
+         i int
+   输入取值范围：-23170到23170以内整数
+
+   映射：近似将复数开根号，放大10000倍，输出
+   
+
+      执行：
+        
+	scoreboard players set r int -1
+	scoreboard players set i int 0
+	function math:complex/sqrt
+	scoreboard players get r int
+	scoreboard players get i int
+
+      输出结果为0
+                10000
+
+
+*70.函数名 math:complex/sqr
+   输入：r int
+         i int
+
+   输出：r int
+         i int
+
+   输入取值范围：-23170到23170以内整数
+
+   映射：将复数自乘一次，输出
+   
+
+      执行：
+        
+	scoreboard players set r int 0
+	scoreboard players set i int 1
+	function math:complex/sqr
+	scoreboard players get r int
+	scoreboard players get i int
+
+      输出结果为-1
+                 0
+
+
+*71.函数名 math:2lg
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：1到102400以内整数
+
+   映射：近似计算输入的常用对数，放大100倍，输出
+   
+
+      执行：
+        
+	scoreboard players set input int 100
+	function math:2lg
+	scoreboard players get result int
+
+      输出结果为200
+
+
+*72.函数名 math:point
+   输入：x int
+         y int
+	 z int
+	 duration int
+
+   输出：带有标签point和标签result的实体
+
+   映射：带有标签result的实体移除该标签,在输入的x int y int z int放缩0.0001倍对应世界坐标召唤一个标签为point和标签result药水云,存在时间为duration int(单位为tick)
+   
+
+      执行：
+        
+	scoreboard players set x int 0
+        scoreboard players set y int 0
+	scoreboard players set z int 0
+	scoreboard players set duration int 0
+	function math:point
+	execute at @e[tag=result] run particle end_rod
+
+      在0 0 0播放一个末地烛粒子
+
+
+*73.函数名 math:line
+   输入：带有直线参数的掉落物
+	 duration int
+
+   输出：带有标签point和标签line和标签result的实体
+
+   映射：带有标签result的实体移除该标签,在直线上描点，点带有标签result和标签line和标签point
+   
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d,0.0d],[1.0d,1.0d,1.0d]],length:8.5}}}
+	scoreboard players set duration int 20
+	execute as @e[tag=tmp] run function math:line
+	kill @e[tag=tmp]
+      循环执行：
+        execute at @e[tag=point] run particle end_rod
+
+
+      末地烛粒子大致排列在过0 0 0和1 1 1的直线上，长度为8.5格，显示时间20tick
+
+
+*74.函数名 math:cross
+   输入：带有直线参数和标签input的掉落物
+         带有直线参数和标签input1的掉落物
+	 duration int
+
+   输出：带有标签point和标签cross的实体
+
+   映射：带有标签result的实体移除该标签，移除标签input和input1，若两直线有1个交点，描出交点，带有标签result和标签cross和标签point
+   
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Tags:["tmp","input"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d,0.0d],[1.0d,0.0d,1.0d]]}}}
+	summon item 0.0 0.0 0.0 {Tags:["tmp","input1"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d,0.0d],[-1.0d,0.0d,-1.0d]]}}}
+	scoreboard players set duration int 20
+	function math:cross
+	kill @e[tag=tmp]
+      循环执行：
+        execute at @e[tag=point] run particle end_rod
+
+
+      0 0 0播放显示时间20tick的末地烛粒子
+
+
+*75.函数名 math:move_point
+   输入：非玩家实体
+         movex int
+	 movey int
+	 movez int
+
+   输出：非玩家实体
+
+   映射：若执行者为非玩家实体，将该实体平移，xyz轴移动格数分别为movex int movey int movez int(10000倍率)
+
+
+      执行：
+        
+	summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+	scoreboard players set movex int 10000
+	scoreboard players set movey int 0
+	scoreboard players set movez int 0
+	execute as @e[tag=tmp] run function math:move_point
+	tag @e remove tmp
+
+
+      将在1 0 0出现一个药水云
+
+
+*76.函数名 math:move_line
+   输入：带有直线参数的掉落物
+         movex int
+	 movey int
+	 movez int
+
+   输出：带有直线参数的掉落物
+
+   映射：若执行者为带有直线参数的掉落物，将直线平移，xyz轴移动格数分别为movex int movey int movez int(10000倍率)
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d,0.0d],[1.0d,1.0d,1.0d]]}},Tags:["tmp"]}
+	scoreboard players set movex int 10000
+	scoreboard players set movey int 0
+	scoreboard players set movez int 0
+	execute as @e[tag=tmp] run function math:move_line
+	tag @e remove tmp
+
+
+      直线沿着x轴平移1格
+
+
+*77.函数名 math:arc/circle
+   输入：x int
+         y int
+	 z int
+	 r int
+	 duration int
+
+   输出：带有标签point和标签circle和标签result的实体
+
+   映射：带有标签result的实体移除该标签，在xz平面内，召唤76个药水云，均在以x y z(10000倍率)对应的点为圆心,r(10倍率)为半径的圆上
+
+
+      执行：
+        
+	scoreboard players set x int 10000
+	scoreboard players set y int 0
+	scoreboard players set z int 0
+	scoreboard players set r int 10
+	function math:arc/circle
+	execute at @e[tag=circle] run particle end_rod
+
+      圆心为(1,0,0)，半径为1
+
+
+*78.函数名 math:circle
+   输入：x int
+         y int
+	 z int
+	 r int
+	 duration int
+
+   输出：带有标签point和标签circle和标签result的实体
+
+   映射：带有标签result的实体移除该标签，以更高的精度画圆
+
+
+      执行：
+        
+	scoreboard players set x int 10000
+	scoreboard players set y int 0
+	scoreboard players set z int 0
+	scoreboard players set r int 10
+	function math:circle
+	execute at @e[tag=circle] run particle end_rod
+
+      圆心为(1,0,0)，半径为1
+
+
+*79.函数名 math:get-distance
+   输入：执行实体与执行坐标
+
+   输出：result int
+
+   映射：计算执行者与执行坐标的距离，放大10000倍，输出
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+            execute as @e[tag=tmp] positioned ^ ^ ^5 run function math:get-distance
+	    scoreboard players get result int
+	    kill @e[tag=tmp]
+        
+	
+
+      输出结果为50000
+
+
+*80.函数名 math:get-angel
+   输入：执行实体和执行坐标和执行朝向
+
+   输出：result int
+
+   映射：在执行实体的位置标记点A，在执行位置标记点B，以执行朝向向前标记点C，计算角ABC，从上往下看，逆时针取正，顺时针取负，放大10000倍，输出
+
+
+      执行：summon area_effect_cloud 1.0 0.0 0.0 {Tags:["tmp","A"]}
+            summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp","B"]}
+            summon area_effect_cloud 1.0 0.0 1.0 {Tags:["tmp","C"]}
+            execute as @e[tag=A,limit=1] at @e[tag=B,limit=1] facing entity @e[tag=C,limit=1] feet run function math:get-angel
+	    scoreboard players get result int
+            kill @e[tag=tmp]
+        
+	
+
+      输出结果为449999
+
+
+*81.函数名 math:get-rotation
+   输入：执行实体
+
+   输出：执行实体 rx
+         执行实体 ry
+
+   映射：获取实体的Rotation[0]，取负，放大10000倍，赋值给执行者在记分板rx分数
+         获取实体的Rotation[1]，取负，放大10000倍，赋值给执行者在记分板ry分数
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+            execute as @e[tag=tmp] run function math:get-rotation
+	    scoreboard players get @e[tag=tmp,limit=1] rx
+	    scoreboard players get @e[tag=tmp,limit=1] ry
+	    kill @e[tag=tmp]
+        
+	
+
+      输出结果为0
+                0
+
+*82.函数名 math:get-pos
+   输入：执行实体
+
+   输出：执行实体 x
+         执行实体 y
+	 执行实体 z
+
+   映射：获取实体的Pos[0]，放大10000倍，赋值给执行者在记分板x分数
+         获取实体的Pos[1]，放大10000倍，赋值给执行者在记分板y分数
+	 获取实体的Pos[2]，放大10000倍，赋值给执行者在记分板z分数
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+            execute as @e[tag=tmp] run function math:get-pos
+	    scoreboard players get @e[tag=tmp,limit=1] x
+	    scoreboard players get @e[tag=tmp,limit=1] y
+	    scoreboard players get @e[tag=tmp,limit=1] z
+	    kill @e[tag=tmp]
+        
+	
+
+      输出结果为0
+                0
+		0
+
+
+*83.函数名 math:2get-pos
+   输入：执行实体
+
+   输出：执行实体 x
+         执行实体 y
+	 执行实体 z
+
+   映射：获取实体的Pos[0]，放大100倍，赋值给执行者在记分板x分数
+         获取实体的Pos[1]，放大100倍，赋值给执行者在记分板y分数
+	 获取实体的Pos[2]，放大100倍，赋值给执行者在记分板z分数
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+            execute as @e[tag=tmp] run function math:2get-pos
+	    scoreboard players get @e[tag=tmp,limit=1] x
+	    scoreboard players get @e[tag=tmp,limit=1] y
+	    scoreboard players get @e[tag=tmp,limit=1] z
+	    kill @e[tag=tmp]
+        
+	
+
+      输出结果为0
+                0
+		0
+
+
+*84.函数名 math:point-rotate
+   输入：执行实体
+         input int
+	 input1 int
+
+   输出：执行实体
+
+   映射：将执行实体绕执行坐标旋转，水平旋转度数为input放缩0.0001倍，竖直旋转度数为input1放缩0.0001倍
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["point"]}
+            scoreboard players set input int 900000
+	    scoreboard players set input1 int 0
+            execute as @e[tag=point] positioned 1.0 0.0 0.0 run function math:point-rotate
+        
+	
+
+      实体绕(1,0,0)水平旋转90度
+
+
+*85.函数名 math:point-rotate1
+   输入：执行实体
+         input int
+	 input1 int
+
+   输出：执行实体
+
+   映射：将执行实体绕执行坐标旋转，水平旋转度数为input放缩0.0001倍，竖直旋转度数为input1放缩0.0001倍，执行实体朝向旋转中心
+
+
+         执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["point"]}
+            scoreboard players set input int 900000
+	    scoreboard players set input1 int 0
+            execute as @e[tag=point] positioned 1.0 0.0 0.0 run function math:point-rotate1
+        
+	
+
+         实体绕(1,0,0)水平旋转90度,视线指向(1,0,0)
+
+
+*86.函数名 math:point-rotate3
+   输入：非玩家执行实体
+         input int
+	 input1 int
+
+   输出：非玩家执行实体
+
+   映射：将执行实体绕执行坐标旋转，水平旋转度数为input放缩0.0001倍，竖直旋转度数为input1放缩0.0001倍，执行实体朝向旋转中心
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["point"]}
+            scoreboard players set input int 900000
+	    scoreboard players set input1 int 0
+            execute as @e[tag=point] positioned 1.0 0.0 0.0 run function math:point-rotate3
+        
+	
+
+      实体绕(1,0,0)水平旋转90度
+
+
+*87.函数名 math:2line
+   输入：带有二维直线参数的掉落物
+	 duration int
+	 y int
+
+   输出：带有标签point和标签line和标签result的实体
+
+   映射：带有标签result的实体移除该标签，在二维直线上描点,直线上点的y坐标均为y int放缩0.0001倍后
+   
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,1.0d]],length:8.5}}}
+	scoreboard players set y int 10000
+	scoreboard players set duration int 20
+	execute as @e[tag=tmp] run function math:line
+	kill @e[tag=tmp]
+      循环执行：
+        execute at @e[tag=point] run particle end_rod
+
+
+      末地烛粒子大致排列在过0 1 0和1 1 1的直线上，长度为8.5格，显示时间20tick
+
+
+*88.函数名 math:2line-ver
+   输入：带有二维直线参数的掉落物
+         执行坐标
+
+   输出：带有标签result和二维直线参数的掉落物
+
+   映射：带有标签result的实体移除该标签，在执行坐标作直线与已知二维直线垂直
+      
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,1.0d]],length:8.5}}}
+	execute positioned 0.0 0.0 0.0 as @e[tag=tmp] run function math:2line-ver
+	kill @e[tag=tmp]
+
+
+      新直线过点(0,0)和(-1,-1)
+
+
+*89.函数名 math:2line-par
+   输入：带有二维直线参数的掉落物
+         执行坐标
+
+   输出：带有标签result和二维直线参数的掉落物
+
+   映射：带有标签result的实体移除该标签，在执行坐标作直线与已知二维直线平行或重合
+   
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,1.0d]],length:8.5}}}
+	execute positioned 1.0 0.0 0.0 as @e[tag=tmp] run function math:2line-par
+	kill @e[tag=tmp]
+
+
+      新直线过点(1,0)和(2,1)
+
+*90.函数名 math:2line-ang
+   输入：带有二维直线参数的掉落物
+         执行坐标
+	 input int
+
+   输出：带有标签result和二维直线参数的掉落物
+
+   映射：带有标签result的实体移除该标签，在执行坐标作直线与已知二维直线夹角为input int放缩0.0001倍
+
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,1.0d]],length:8.5}}}
+	scoreboard players set input int 900000
+	execute as @e[tag=tmp] run function math:2line-ang
+	kill @e[tag=tmp]
+
+
+      新直线过点(0,0)和(-1,-1)
+
+
+*91.函数名 math:line-cre
+   输入：执行实体
+         执行坐标
+
+   输出：带有标签result和直线参数的掉落物
+
+   映射：带有标签result的实体移除该标签，作新直线，该直线经过执行实体的位置和执行坐标
+
+
+      执行：
+        
+	summon area_effect 0.0 0.0 0.0 {Tags:["tmp"]}
+	execute as @e[tag=tmp] positioned 1.0 1.0 1.0 run function math:line-cre
+	kill @e[tag=tmp]
+
+
+      新直线过点(0,0,0)和(1,1,1)
+
+
+*92.函数名 math:2line-cre
+   输入：执行实体
+         执行坐标
+
+   输出：带有标签result和二维直线参数的掉落物
+
+   映射：带有标签result的实体移除该标签，作新二维直线，该二维直线经过执行实体的位置和执行坐标
+
+
+      执行：
+        
+	summon area_effect 0.0 0.0 0.0 {Tags:["tmp"]}
+	execute as @e[tag=tmp] positioned 1.0 0.0 1.0 run function math:line-cre
+	kill @e[tag=tmp]
+
+
+      新直线过点(0,0)和(1,1)
+
+
+*93.函数名 math:line-vec
+   输入：带有直线参数的掉落物
+
+   输出：vectorx int
+         vectory int
+	 vectorz int
+
+   映射：获取直线的方向向量，放大10000倍，输出
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d,0.0d],[1.0d,1.0d,1.0d]]}},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:line-vec
+	scoreboard players get vectorx int
+	scoreboard players get vectory int
+	scoreboard players get vectorz int
+	kill @e[tag=tmp]
+
+
+      输出结果为1
+                1
+		1
+
+
+*94.函数名 math:2line-vec
+   输入：带有二维直线参数的掉落物
+
+   输出：vectorx int
+	 vectorz int
+
+   映射：获取二维直线的方向向量，放大10000倍，输出
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,1.0d]]}},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:2line-vec
+	scoreboard players get vectorx int
+	scoreboard players get vectorz int
+	kill @e[tag=tmp]
+
+
+      输出结果为1
+		1
+
+
+*95.函数名 math:2cross
+   输入：带有标签input和二维直线参数的掉落物
+         带有标签input1和二维直线参数的掉落物
+	 y int
+	 duration int
+
+   输出：带有标签cross和point和标签result的实体
+
+   映射：，带有标签result的实体移除该标签计算两直线交点，输出，存在时间为duration int，高度为y int放缩0.0001倍
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,1.0d]]}},Tags:["tmp","input"]}
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{line:[[0.0d,0.0d],[1.0d,-1.0d]]}},Tags:["tmp","input1"]}
+	scoreboard players set y int 10000
+	scoreboard players set duration int 20
+	function math:2cross
+	kill @e[tag=tmp]
+
+
+      在(0,1,0)召唤一个存在时间20tick的药水云
+
+
+*96.函数名 math:cuboid-cre
+   输入：执行实体
+         执行坐标
+
+   输出：带有标签result和长方体参数的掉落物
+
+   映射：带有标签result的实体移除该标签，以执行实体位置和执行坐标连线为对角线，创建一个长方体
+
+
+      执行：
+        
+	summon area_effct_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+	execute as @e[tag=tmp] positioned 1.0 1.0 1.0 run function math:cuboid-cre
+	kill @e[tag=tmp]
+	tellraw @a {"nbt":"Item.tag.cube","entity":"@e[tag=result,limit=1]"}
+
+
+      创建一个长宽高为1格的长方体
+
+
+*97.函数名 math:cuboid
+   输入：携带长方体参数的掉落物
+         duration int
+
+   输出：带有标签point和标签cube和标签result的实体
+
+   映射：带有标签result的实体移除该标签，在该长方体上描点，间距为1格
+
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Item:{id:"minecraft:glass",Count:1b,tag:{cube:[[0.0d,0.0d,0.0d],[1.0d,1.0d,1.0d]]}},Tags:["tmp"]}
+	scoreboard players set duration int 20
+	execute as @e[tag=tmp] run function math:cuboid
+	kill @e[tag=tmp]
+
+      循环执行：
+
+	execute at @e[tag=point] run particle end_rod
+
+
+      显示一个长宽高为1格的长方体20tick
+
+
+*98.函数名 math:cuboid1
+   输入：携带长方体参数的掉落物
+         duration int
+
+   输出：带有标签point和标签cube和标签result的实体
+
+   映射：在该长方体上描点，间距为0.1格
+
+
+      执行：
+        
+	summon item 0.0 0.0 0.0 {Item:{id:"minecraft:glass",Count:1b,tag:{cube:[[0.0d,0.0d,0.0d],[1.0d,1.0d,1.0d]]}},Tags:["tmp"]}
+	scoreboard players set duration int 20
+	execute as @e[tag=tmp] run function math:cuboid1
+	kill @e[tag=tmp]
+
+      循环执行：
+
+	execute at @e[tag=point] run particle end_rod
+
+
+      显示一个长宽高为1格的长方体20tick
+
+
+*99.函数名 math:cuboid-sele
+   输入：执行实体和执行坐标
+
+   输出：带有标签result的实体
+
+   映射：带有标签result的实体移除该标签，选中长方体区域内的实体，添加标签result
+
+
+      执行：
+        
+	summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+	execute as @e[tag=tmp] positioned 1.0 1.0 1.0 run function math:cuboid-sele
+	kill @e[tag=tmp]
+
+
+
+      选中长宽高为1格的长方体区域内实体，添加标签result
+
+
+*100.函数名 math:mid
+   输入：执行实体和执行坐标
+         duration int
+
+   输出：带有标签result和标签point和标签mid的实体
+
+   映射：带有标签result的实体移除该标签，对执行实体的位置和执行位置取中点，输出
+
+
+      执行：
+        
+	summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+	scoreboard players set duration int 20
+	execute as @e[tag=tmp] positioned 2.0 2.0 2.0 run function math:mid
+	kill @e[tag=tmp]
+
+
+
+      在(1,1,1)召唤一个存在时间20tick的药水云
+
+
+*101.函数名 math:mid-ver
+   输入：执行实体和执行坐标
+
+   输出：带有标签result和标签line和标签mid-ver和标签ver的实体
+
+   映射：带有标签result的实体移除该标签，作执行实体的位置和执行位置连线中垂线，输出
+
+
+      执行：
+        
+	summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+	scoreboard players set duration int 20
+	execute as @e[tag=tmp] positioned 2.0 0.0 2.0 run function math:mid-ver
+	kill @e[tag=tmp]
+
+
+
+      直线过(1,1)，与连线垂直
+
+
+*102.函数名 math:operation/plus
+   输入：储存数字的执行实体
+
+   输出：储存数字的执行实体
+
+   映射：将该实体的bit0与bit1携带数字相加，赋值bit0
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[1,1,1,1,1,1],bit1:[1,1,1,1,1,-1]}}}
+	execute as @e[tag=tmp] run function math:operation/plus
+	kill @e[tag=tmp]
+
+
+
+      bit0变为[0,0,0,0,0,1]
+
+
+*103.函数名 math:operation/compare
+   输入：储存数字的执行实体
+
+   输出：result int
+
+   映射：比较该实体的bit0与bit1表示数字绝对值的大小，若bi0较大输出1，若相等输出0，若bit1较大输出-1
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[1,1,1,1,1,1],bit1:[1,1,1,1,1,-1]}}}
+	execute as @e[tag=tmp] run function math:operation/compare
+	kill @e[tag=tmp]
+	scoreboard players get result int
+
+
+
+      输出结果为0
+
+
+*104.函数名 math:vector/decompose
+   输入：vrx int
+         vry int
+	 vectorm int
+
+   输出：vectorx int
+         vectory int
+	 vectorz int
+
+   映射：已知向量的模长(vectorm int)和向量方向(vrx int，vry int，角度制，10000倍率)，对向量正交分解，求出沿三个轴(x,y,z)方向的分向量，放大10000倍率，输出
+
+
+      执行：
+        
+	scoreboard players set vrx int 450000
+	scoreboard players set vry int 0
+	scoreboard players set vectorm int 1
+	function math:vector/decompose
+	scoreboard players get vectorx int
+	scoreboard players get vectory int
+	scoreboard players get vectorz int
+
+
+
+      输出结果为14142
+                0
+		14142
+
+
+*105.函数名 math:vector/facing
+   输入：执行实体
+
+   输出：执行实体的记分板vx,vy,vz上的分数
+
+   映射：获取执行实体视线的单位方向向量，放大10000倍，输出
+
+
+*106.函数名 math:vector/cos
+   输入：带有向量参数的掉落物
+         带有向量参数的掉落物
+
+   输出：cos int
+
+   映射：计算两向量夹角的余弦值，放大100000000倍输出
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[1.0d,0.0d,0.0d]}}}}
+	summon item ~ ~1 ~ {Tags:["tmp1"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[0.0d,1.0d,0.0d]}}}}
+	execute as @e[tag=tmp] at @e[tag=tmp1] run function math:vector/cos
+	kill @e[tag=tmp]
+	kill @e[tag=tmp]
+	tellraw @a {"score":{"name":"cos","objective":"int"}}
+
+
+
+      输出结果为0
+
+
+*107.函数名 math:vector/modulus
+   输入：带有向量参数的掉落物
+
+   输出：带有向量参数的掉落物
+
+   映射：计算向量模长，输出到Item.tag.vector.mod
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[1.0d,0.0d,0.0d]}}}}
+	execute as @e[tag=tmp] at @e[tag=tmp1] run function math:vector/modulus
+	execute as @e[tag=tmp] run tellraw @a {"nbt":"Item.tag.vector.mod","entity":"@s"}
+	kill @e[tag=tmp]
+
+
+
+      输出结果为1.0d
+
+
+*108.函数名 math:vector/rotation
+   输入：带有向量参数的掉落物
+
+   输出：vrx int
+         vry int
+	 带有向量参数的掉落物
+
+   映射：计算向量的方向角(角度制),放大10000倍，输出到vrx int，vry int和Item.tag.rot[0]和Item.tag.rot[1]
+
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[0.0d,1.0d,0.0d]}}}}
+	execute as @e[tag=tmp] run function math:vector/rotation
+	kill @e[tag=tmp]
+	tellraw @a {"score":{"name":"vrx","objective":"int"}}
+	tellraw @a {"score":{"name":"vry","objective":"int"}}
+
+
+
+      输出结果为900000
+                899999
+
+
+*109.函数名 math:vector/rotation1
+   输入：vectorx int
+         vectory int
+	 vectorz int
+
+   输出：vrx int
+         vry int
+
+   映射：计算向量的方向角(角度制),放大10000倍，输出到vrx int，vry int
+
+
+      执行：
+        
+	scoreboard players set vectorx int 0
+	scoreboard players set vectory int 1
+	scoreboard players set vectorz int 0
+	execute as @e[tag=tmp] run function math:vector/rotation
+	tellraw @a {"score":{"name":"vrx","objective":"int"}}
+	tellraw @a {"score":{"name":"vry","objective":"int"}}
+
+
+
+      输出结果为900000
+                899999
+
+
+*110.函数名 math:vector/deco
+   输入：带有向量参数的掉落物
+
+   输出：带有向量参数的掉落物
+
+   映射：根据向量的方向角和模长，正交分解，求出沿三个轴(x,y,z)方向的分向量，放大10000倍率，输出
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{mod:1.0d,rot:[0.0d,0.0d]}}}}
+	execute as @e[tag=tmp] run function math:vector/deco
+	execute as @e[tag=tmp] run tellraw @a {"nbt":"Item.tag.vector.pos","entity":"@s"}
+	kill @e[tag=tmp]
+
+
+
+      输出结果为[0.0d,0.0d,1.0d]
+
+
+*111.函数名 math:vector/dotp
+   输入：带有向量参数的掉落物
+         带有向量参数的掉落物
+
+   输出：result int
+
+   映射：计算向量的内积，放大10000倍，输出
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[1.0d,0.0d,0.0d]}}}}
+	summon item ~ ~1 ~ {Tags:["tmp1"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[0.0d,1.0d,0.0d]}}}}
+	execute as @e[tag=tmp] at @e[tag=tmp1] run function math:vector/dotp
+	kill @e[tag=tmp]
+	kill @e[tag=tmp1]
+	scoreboard players get result int
+
+
+
+      输出结果为0
+
+
+*112.函数名 math:vector/corp
+   输入：带有向量参数的掉落物
+         带有向量参数的掉落物
+
+   输出：带有向量参数和标签vector和标签result的掉落物
+
+   映射：带有标签result的实体移除该标签,计算向量的外积，输出
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[1.0d,0.0d,0.0d]}}}}
+	summon item ~ ~1 ~ {Tags:["tmp1"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[0.0d,1.0d,0.0d]}}}}
+	execute as @e[tag=tmp] at @e[tag=tmp1] run function math:vector/crop
+	kill @e[tag=tmp]
+	kill @e[tag=tmp1]
+	tellraw @a {"nbt":"Item.tag.vector.pos","entity":"@e[tag=result,limit=1]"}
+
+
+
+      输出结果为[0.0d,0.0d,1.0d]
+
+
+*113.函数名 math:vector/scal
+   输入：带有向量参数的掉落物
+         input int
+
+   输出：带有向量参数的掉落物
+
+   映射：计算该向量与输入的0.01倍的数乘，输出
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{vector:{pos:[1.0d,0.0d,0.0d]}}}}
+	scoreboard players set input int 200
+	execute as @e[tag=tmp] run function math:vector/scal
+	execute as @e[tag=tmp] run tellraw @a {"nbt":"Item.tag.vector.pos","entity":"@s"}
+	kill @e[tag=tmp]
+
+
+
+      输出结果为[2.0d,0.0d,0.0d]
+
+
+*114.函数名 math:arc/flect
+   输入：带有标签input的实体
+         执行坐标
+         d int
+	 duration int
+
+   输出：带有标签result和标签point和标签flect的实体
+
+   映射：带有标签result的实体移除该标签,将带有标签input的实体以0.0 0.0 0.0为中心，从xoz平面，投影到与执行视线垂直，距离执行坐标为d int的0.1倍的平面上,投影实体存在时间为duration int个tick
+
+
+*115.函数名 math:sphere
+   输入：r int
+         执行坐标
+
+   输出：带有标签result和标签point和标签sphere的实体
+
+   映射：带有标签result的实体移除该标签,在以执行坐标为球心，r int(单位0.1格)为半径的球面上描点，存在时间1tick
+
+      执行：
+        
+	scoreboard players set r int 10
+	execute positioned 0.0 1.0 0.0 run function math:sphere
+	execute at @e[tag=result] run particle end_rod
+
+
+
+      颗粒显示为一个球面
+
+
+*116.函数名 math:cn/local
+   输入：带有二维局部坐标系参数的掉落物执行实体
+         执行实体在记分板u上的分数
+         执行实体在记分板w上的分数
+
+   输出：执行实体在记分板x上的分数
+         执行实体在记分板y上的分数
+	 执行实体在记分板z上的分数
+
+   映射：在二维局部坐标系中单位0.01格的坐标(u,w)转化为直角坐标，输出，单位0.0001格
+
+      执行：
+        
+	summon area_effect_cloud ~ 180.0 ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{o:[0.0,0.0,0.0],u:[1.0,0.0,0.0],w:[0.0,0.0,1.0]}}}
+	scoreboard players set @e[tag=tmp] u 100
+	scoreboard players set @e[tag=tmp] w -100
+	execute as @e[tag=tmp] run function math:cn/local
+	scoreboard players get @e[tag=tmp,limit=1] x
+	scoreboard players get @e[tag=tmp,limit=1] y
+	scoreboard players get @e[tag=tmp,limit=1] z
+	kill @e[tag=tmp]
+
+
+
+      输出结果为:10000
+                 0
+		 -10000
+
+
+*117.函数名 math:cn/polar
+   输入：ρ cn
+         θ cn
+
+   输出：x cn
+         z cn
+
+   映射：将极坐标(ρ,θ)放缩0.0001倍，其中θ为角度制，转化为平面直角坐标(x,z)，放大10000倍，输出
+
+      执行：
+        
+	scoreboard players set ρ cn 10000
+	scoreboard players set θ cn 900000
+	function math:cn/polar
+	scoreboard players get x cn
+	scoreboard players get z cn
+
+
+
+      输出结果为:10000
+                 0
+
+
+*118.函数名 math:cn/local-f
+   输入：u cn
+         v cn
+	 w cn
+
+   输出：x cn
+         y cn
+         z cn
+
+   映射：以执行位置为原点，以执行朝向为方向，向左为u轴，向上为v轴，向前为w轴，建立局部坐标系
+         将输入坐标(u,v,w)放缩0.0001倍，转化为空间直角坐标(x,y,z)，放大10000倍，输出
+
+      执行：
+        
+	scoreboard players set u cn 10000
+	scoreboard players set v cn 10000
+	scoreboard players set w cn 10000
+	summon area_effect_cloud 1.0 0.0 0.0 {Tags:["tmp"]}
+	execute at @e[tag=tmp] run function math:cn/local-f
+	kill @e[tag=tmp]
+	scoreboard players get x cn
+	scoreboard players get y cn
+	scoreboard players get z cn
+
+
+
+      输出结果为:20000
+                 10000
+		 10000
+
+
+*119.函数名 math:cn/local-m
+   输入：u cn
+         v cn
+	 w cn
+
+   输出：x cn
+         y cn
+         z cn
+
+   映射：以执行位置为原点，以非玩家执行实体的Motion向前为方向，向左为u轴，向上为v轴，向前为w轴，建立局部坐标系
+         将输入坐标(u,v,w)放缩0.0001倍，转化为空间直角坐标(x,y,z)，放大10000倍，输出
+
+      执行：
+        
+	scoreboard players set u cn 10000
+	scoreboard players set v cn 10000
+	scoreboard players set w cn 10000
+	summon armor_stand 0.0 0.0 0.0 {Tags:["tmp"],Motion:[1.0d,0.0d,0.0d]}
+	execute as @e[tag=tmp] at @s run function math:cn/local-m
+	kill @e[tag=tmp]
+	scoreboard players get x cn
+	scoreboard players get y cn
+	scoreboard players get z cn
+
+
+
+      输出结果为:10000
+                 10000
+		 -10000
+
+
+*120.函数名 math:cn/spheri
+   输入：θ cn
+         φ cn
+	 ρ cn
+
+   输出：x cn
+         y cn
+         z cn
+
+   映射：以执行位置为原点，建立球坐标系
+         将输入坐标(θ,φ,ρ)放缩0.0001倍，转化为空间直角坐标(x,y,z)，放大10000倍，输出
+
+      执行：
+        
+	scoreboard players set θ cn 450000
+	scoreboard players set φ cn 450000
+	scoreboard players set ρ cn 10000
+	execute positioned 0.0 0.0 0.0 run function math:cn/spheri
+	scoreboard players get x cn
+	scoreboard players get y cn
+	scoreboard players get z cn
+
+
+
+      输出结果为:4999
+                 7071
+		 4999
+
+
+*121.函数名 math:average
+   输入：带有整数列表的执行者
+
+   输出：result int
+
+   映射：计算列表中所有数据的平均数，向下取整，输出
+
+      执行：
+        
+	summon item ~ 180.0 ~ {Item:{id:"minecraft:glass",Count:1b,tag:{list:[2147483647,2147483647,2147483647,2147483647]}},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:average
+	kill @e[tag=tmp]
+	scoreboard players get result int
+
+
+
+      输出结果为:2147483647
+
+
+*122.函数名 math:random/coin
+
+   输出：result int
+         执行者的聊天栏信息
+
+   映射：投掷一枚硬币，若正面朝上返回1，若反面朝上返回0
+
+
+*123.函数名 math:random/dice
+
+   输出：result int
+         执行者的聊天栏信息
+
+   映射：投掷一枚硬币，若正面朝上返回1，若反面朝上返回0
+
+
+
+*124.函数名 math:examples/missile/tick
+
+   循环执行：function math:examples/missile/tick
+
+   右键胡萝卜竿，发射螺旋导弹，追踪5格以外最近的非玩家非盔甲架实体，见图1
+
+
+*125.函数名 math:2exp
+   输入：input int
+
+   输入取值范围：-2147483648到168以内整数
+
+   输出：result int
+
+   映射：输入放缩0.1倍，计算以自然对数的底为底的指数，放大100倍输出
+
+      执行：
+        
+	scoreboard players set input int 1
+	function math:2exp
+	scoreboard players get result int
+
+
+
+      输出结果为:272
+
+
+*126.函数名 math:ajmd
+   输入：x int(坐标原点x坐标，1000000倍率)
+         y int(坐标原点y坐标，1000000倍率)
+         z int(坐标原点z坐标，1000000倍率)
+         roctx int
+         duration int
+
+   输出：带有标签printer的实体
+
+      执行：
+        
+           scoreboard players set x int -17000000
+           scoreboard players set y int 24000000
+           scoreboard players set z int -160000000
+           scoreboard players set roctx int 0
+           scoreboard players set duration int 100
+
+      循环执行：
+        
+           function math:gragh/ajmd
+	   execute at @e[tag=printer] run particle end_rod
+       
+      以(17,24,-160)为中心绘制阿基米德螺线，见图2
+
+
+*127.函数名 math:rose
+   输入：x int(坐标原点x坐标，1000000倍率)
+         y int(坐标原点y坐标，1000000倍率)
+         z int(坐标原点z坐标，1000000倍率)
+         roctx int
+         duration int
+	 r int(控制大小)
+	 T int(控制周期和花瓣数目)
+
+   输出：带有标签printer的实体
+
+      执行：
+        
+           scoreboard players set x int -17000000
+           scoreboard players set y int 24000000
+           scoreboard players set z int -160000000
+           scoreboard players set roctx int 0
+           scoreboard players set duration int 400
+	   scoreboard players set r int 3
+	   scoreboard players set T int 4
+
+      循环执行：
+        
+           function math:gragh/rose
+	   execute at @e[tag=printer] run particle end_rod
+       
+      以(17,24,-160)为中心绘制阿基米德螺线，见图3,图4
+
+
+*128.函数名 math:conic
+   输入：x int(坐标原点x坐标，1000000倍率)
+         y int(坐标原点y坐标，1000000倍率)
+         z int(坐标原点z坐标，1000000倍率)
+         roctx int
+         duration int
+	 ecc int(离心率,10倍率)
+	 l int(准焦距,100倍率)
+
+   输出：带有标签printer的实体
+
+      执行：
+        
+           scoreboard players set x int -17000000
+           scoreboard players set y int 24000000
+           scoreboard players set z int -160000000
+           scoreboard players set roctx int 0
+           scoreboard players set duration int 400
+	   scoreboard players set ecc int 0
+	   scoreboard players set l int 100
+
+      循环执行：
+        
+           function math:gragh/conic
+	   execute at @e[tag=printer] run particle end_rod
+       
+      绘制圆锥曲线，见图5,图6,图7
+
+
+*129.函数名 math:version
+
+    输出：version int
+
+    映射：查看库的版本信息，返回库的数据版本号给version int
+
+    执行：
+        function math:version
+
+
+*130.函数名 math:author
+
+    映射：查看库的作者信息
+
+    执行：
+        function math:author
+
+
+*131.函数名 math:unload
+
+    映射：移除库中所有记分板
+
+    执行：
+        function math:unload
+
+
+*132.函数名 math:sphere-sele
+   输入：执行坐标
+         r int(100倍率)
+
+   输出：带有标签result的实体
+
+   映射：带有标签result的实体移除该标签，选中球体区域内的实体，添加标签result
+
+
+*133.函数名 math:center
+   输入：三个以上的带有input标签的实体
+
+   输出：result int
+         带有标签result和标签center和标签point的实体
+
+   映射：计算三点所在圆弧的圆心（实体）和半径（分数）
+
+
+*134.函数名 math:double
+   输入：带有double类型nbt的执行者
+
+   输出：sign int
+         int int
+	 dec int
+	 bit0 int
+	 bit1 int
+	 bit2 int
+	 bit3 int
+	 bit4 int
+	 bit5 int
+	 bit6 int
+	 bit7 int
+
+   映射：转换double信息为int信息，sign为符号，int为整数部分，dec为小数部分，输出
+
+      执行：
+        
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b,tag:{input:-12345678.12345678}},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:double
+	scoreboard players get sign int
+	scoreboard players get int int
+	scoreboard players get dec int
+	scoreboard players get bit0 int
+	scoreboard players get bit1 int
+	scoreboard players get bit2 int
+	scoreboard players get bit3 int
+	scoreboard players get bit4 int
+	scoreboard players get bit5 int
+	scoreboard players get bit6 int
+	scoreboard players get bit7 int
+	kill @e[tag=tmp]
+
+
+
+      输出结果为:-1
+                  12345678
+		  12345678
+		  8
+		  7
+		  6
+		  5
+		  4
+		  3
+		  2
+		  1
+
+
+*135.函数名 math:double1
+   输入：sign int
+         int int
+	 dec int
+
+   sign int范围:{1,-1}
+   int int范围:0..29999999
+   dec int范围:0..99999999
+
+   输出：执行者的Item.tag.result
+	 bit0 int
+	 bit1 int
+	 bit2 int
+	 bit3 int
+	 bit4 int
+	 bit5 int
+	 bit6 int
+	 bit7 int
+
+   映射：转换int信息为double信息，sign为符号，int为整数部分，dec为小数部分，输出
+
+      执行：
+        
+	scoreboard players set sign int 1
+	scoreboard players set int int 1
+	scoreboard players set dec int 12345678
+	summon item ~ ~ ~ {Item:{id:"minecraft:glass",Count:1b},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:double1
+	data get entity @e[tag=tmp,limit=1] Item.tag.result
+	scoreboard players get bit0 int
+	scoreboard players get bit1 int
+	scoreboard players get bit2 int
+	scoreboard players get bit3 int
+	scoreboard players get bit4 int
+	scoreboard players get bit5 int
+	scoreboard players get bit6 int
+	scoreboard players get bit7 int
+	kill @e[tag=tmp]
+
+
+
+      输出结果为: 1.12345678d
+                  1
+		  0
+		  0
+		  0
+		  0
+		  0
+		  0
+		  0
+
+
+*136.函数名 math:break
+   输入：input int
+
+   input int范围:-99999999..99999999
+
+   输出：sign int
+         bit0 int
+	 bit1 int
+	 bit2 int
+	 bit3 int
+	 bit4 int
+	 bit5 int
+	 bit6 int
+	 bit7 int
+
+   映射：获取输入的数位信息，输出
+
+      执行：
+        
+	scoreboard players set input int -123
+	function math:break
+	scoreboard players get sign int
+	scoreboard players get bit2 int
+	scoreboard players get bit1 int
+	scoreboard players get bit0 int
+
+
+
+      输出结果为: -1
+                  1
+		  2
+		  3
+
+
+*137.函数名 math:sum
+   输入：带有整数列表的执行者
+
+   输出：result int
+
+   映射：计算列表中所有数据的和，输出
+
+      执行：
+        
+	summon item ~ 180.0 ~ {Item:{id:"minecraft:glass",Count:1b,tag:{list:[1,1,1]}},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:sum
+	kill @e[tag=tmp]
+	scoreboard players get result int
+
+
+
+      输出结果为:3
+
+
+*138.函数名 math:laplace_smooth
+   输入：带有整数列表的执行者
+
+   输出：result int
+
+   映射：对列表第一项与列表数据和的比值进行拉普拉斯平滑处理，放大10000倍，输出
+
+      执行：
+        
+	summon item ~ 180.0 ~ {Item:{id:"minecraft:glass",Count:1b,tag:{list:[1,1,1]}},Tags:["tmp"]}
+	execute as @e[tag=tmp] run function math:laplace_smooth
+	kill @e[tag=tmp]
+	scoreboard players get result int
+
+
+
+      输出结果为:3333
+
+
+*139.函数名 math:vector/unit
+   输入：x int
+         y int
+	 z int
+
+   输入取值范围:三数平方和不超100000000
+
+   输出：i int
+         j int
+	 k int
+
+   映射：计算向量[x,y,z]的单位向量，放大100000000倍，输出为向量[i,j,k]
+
+      执行：
+        
+	scoreboard players set x int 100
+	scoreboard players set y int 100
+	scoreboard players set z int 100
+	function math:vector/unit
+	scoreboard players get i int
+	scoreboard players get j int
+	scoreboard players get k int
+
+
+
+      输出结果为:57735100
+                 57735100
+		 57735100
+
+
+*140.函数名 math:operation/bit0/sqr
+   输入：掉落物实体
+         input int
+
+   输入取值范围:-99999999到99999999以内整数
+
+   输出：掉落物实体nbt
+
+   映射：将输入自平方，存入大数
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[0,0,0,0,0,1]}}}
+	scoreboard players set input int 2
+	execute as @e[tag=tmp] run function math:operation/bit0/sqr
+	execute as @e[tag=tmp] run function math:operation/bit0/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为4
+
+
+*141.函数名 math:operation/bit1/sqr
+   输入：掉落物实体
+         input int
+
+   输入取值范围:-99999999到99999999以内整数
+
+   输出：掉落物实体nbt
+
+   映射：将输入自平方，存入大数
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit1:[1,1,1,0,0,1]}}}
+	scoreboard players set input int 2
+	execute as @e[tag=tmp] run function math:operation/bit1/sqr
+	execute as @e[tag=tmp] run function math:operation/bit1/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为4
+
+
+*142.函数名 math:operation/bit2/sqr
+   输入：掉落物实体
+         input int
+
+   输入取值范围:-99999999到99999999以内整数
+
+   输出：掉落物实体nbt
+
+   映射：将输入自平方，存入大数
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit2:[0,0,0,0,0,1]}}}
+	scoreboard players set input int 2
+	execute as @e[tag=tmp] run function math:operation/bit2/sqr
+	execute as @e[tag=tmp] run function math:operation/bit2/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为4
+
+
+*143.函数名 math:operation/bit0/mult0
+   输入：掉落物实体
+         input int
+
+   输入取值范围:-9999到9999以内整数
+
+   输出：掉落物实体nbt
+
+   映射：将输入自平方，转为大数，存入掉落物实体nbt
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[0,0,0,0,0,1]}}}
+	scoreboard players set input int 2
+	execute as @e[tag=tmp] run function math:operation/bit0/mult0
+	execute as @e[tag=tmp] run function math:operation/bit0/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为200020002
+
+
+*144.函数名 math:operation/bit1/mult0
+   输入：掉落物实体
+         input int
+
+   输入取值范围:-9999到9999以内整数
+
+   输出：掉落物实体nbt
+
+   映射：将输入自平方，转为大数，存入掉落物实体nbt
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[0,0,0,0,0,1]}}}
+	scoreboard players set input int 2
+	execute as @e[tag=tmp] run function math:operation/bit1/mult0
+	execute as @e[tag=tmp] run function math:operation/bit1/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为200020002
+
+
+*145.函数名 math:operation/bit2/mult0
+   输入：掉落物实体
+         input int
+
+   输入取值范围:-9999到9999以内整数
+
+   输出：掉落物实体nbt
+
+   映射：将输入自平方，转为大数，存入掉落物实体nbt
+   
+
+      执行：
+        
+	summon item ~ ~ ~ {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{bit0:[0,0,0,0,0,1]}}}
+	scoreboard players set input int 2
+	execute as @e[tag=tmp] run function math:operation/bit2/mult0
+	execute as @e[tag=tmp] run function math:operation/bit2/0-2
+	scoreboard players get result int
+	kill @e[tag=tmp]
+
+      输出结果为200020002
+
+
+*146.函数名 math:120_radius
+   输入：r int
+         执行坐标
+
+   输入取值范围:-999到999以内整数
+
+   输出：带有标签result的实体
+
+   映射：带有标签result的实体移除该标签,在xz平面以执行坐标为圆心,r int(10倍率)为圆心的圆上生成120个实体
+   
+
+      执行：
+        
+	scoreboard players set r int 30
+	execute positioned 0.0 0.0 0.0 run function math:120_radius
+	execute at @e[tag=result] run particle end_rod
+
+      圆的半径为3
+
+
+*147.函数名 math:60_radius
+   输入：r int
+         执行坐标
+
+   输入取值范围:-999到999以内整数
+
+   输出：带有标签result的实体
+
+   映射：带有标签result的实体移除该标签,在xz平面以执行坐标为圆心,r int(10倍率)为圆心的圆上生成60个实体
+   
+
+      执行：
+        
+	scoreboard players set r int 30
+	execute positioned 0.0 0.0 0.0 run function math:60_radius
+	execute at @e[tag=result] run particle end_rod
+
+      圆的半径为3
+
+
+*148.函数名 math:30_radius
+   输入：r int
+         执行坐标
+
+   输入取值范围:-999到999以内整数
+
+   输出：带有标签result的实体
+
+   映射：带有标签result的实体移除该标签,在xz平面以执行坐标为圆心,r int(10倍率)为圆心的圆上生成30个实体
+   
+
+      执行：
+        
+	scoreboard players set r int 30
+	execute positioned 0.0 0.0 0.0 run function math:30_radius
+	execute at @e[tag=result] run particle end_rod
+
+      圆的半径为3
+
+
+*149.函数名 math:operation/devide
+   输入：储存数字的执行实体
+
+   输出：result int
+
+   映射：近似计算bit0/bit1，输出到result int
+
+
+*150.函数名 math:0sqrt
+   输入：input int
+
+   输出：result int
+
+   输入取值范围：-2147483647到2148483647以内整数
+
+   映射：将输入取绝对值，近似计算算术平方根，输出
+   
+
+      执行：
+
+        scoreboard players set input int 100
+        function math:0sqrt
+	scoreboard players get result int
+
+      输出结果为10
+
+
+*151.函数名 math:affine
+   输入：仿射变换执行者
+
+   输出：仿射变换执行者的Item.tag.result
+
+   映射：对执行者的Item.tag.input进行仿射变换.
+   
+
+      执行：
+
+        summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{input:[0,1],affine:[[2,3],[4,5],[6,7]]}}}
+	execute as @e[tag=tmp] run function math:affine
+	tellraw @a {"nbt":"Item.tag.result","entity":"@e[tag=tmp,limit=1]"}
+	kill @e[tag=tmp]
+
+
+      进行变换:
+
+
+      [2 4] [0]    [6]
+      [3 5] [1]  + [7]
+
+      输出结果为：[10.0d,12.0d]
+
+
+*152.函数名 math:3affine
+   输入：仿射变换执行者
+
+   输出：仿射变换执行者的Item.tag.result
+
+   映射：对执行者的Item.tag.input进行仿射变换.
+   
+
+      执行：
+
+        summon item 0.0 0.0 0.0 {Tags:["tmp"],Item:{id:"minecraft:glass",Count:1b,tag:{input:[0,1,8],affine:[[2,3,9],[4,5,10],[12,13,14],[6,7,11]]}}}
+	execute as @e[tag=tmp] run function math:3affine
+	tellraw @a {"nbt":"Item.tag.result","entity":"@e[tag=tmp,limit=1]"}
+	kill @e[tag=tmp]
+
+
+      进行变换:
+
+
+      [2 4   12] [0]    [6  ]
+      [3 5   13] [1]  + [7  ]
+      [9 10  14] [8]    [11 ]
+     
+      输出结果为：[106.0d,116.0d,133.0d]
+
+
+*153.函数名 math:uuid-random
+
+   适用于1.16快照以后的版本
+   1.16快照以前的版本请查看12号函数
+
+   输入：min int
+         max int
+
+   输出：random int
+
+   输入取值范围：-2147483648到2147483647以内整数
+
+   映射：若两个输入相等，两个输入的值赋值输出
+        若两个输入不相等，在两个输入之间生成伪随机整数，赋值输出
+   
+
+      执行：
+
+        scoreboard players set min int 0
+	scoreboard players set max int 2
+        function math:uuid-random
+	scoreboard players get random int
+
+      输出结果可能为1
+
+
+*154.函数名 math:efunction/value
+
+   输入：掉落物执行者
+         input int
+
+   输出：result int
+
+
+   映射：若该掉落物为一个<初等函数>,计算该初等函数的值，放大10000倍，输出
+
+
+   初等函数的构造：{Item:{tag:{functions:[]}}}
+   functions是基本函数的列表.
+
+   以下一个基本函数的格式：
+   {function:"函数名",c:常数函数的值(可省略),input:[a,b],extra:[c,d]}
+
+   将会计算cf(ax+b)+d,放大10000倍输出(其中a,b,c,d支持浮点数)
+
+   函数名有：
+            c	        常数函数
+	    x	        1次幂函数
+	    x^2	        2次幂函数
+	    x^3	        3次幂函数
+	    x^-1        -1次幂函数
+	    x^-2        -2次幂函数
+	    sqrt        1/2次幂函数
+	    sqrt-1      -1/2次幂函数
+	    abs	        绝对值函数
+	    sin	        正弦函数（角度制）
+	    cos	        余弦函数（角度制）
+	    tan	        正切函数（角度制）
+	    cot	        余切函数（角度制）
+	    sin-1       反正弦函数（角度制）
+	    cos-1       反余弦函数（角度制）
+	    tan-1       反正切函数（角度制）
+	    cot-1       反余切函数（角度制）
+	    exp	        以 e为底的指数函数
+	    lg	        以10为底的对数函数
+
+
+*155.函数名 math:tick_mode/on
+   映射：打开常载模式
+
+
+*156.函数名 math:tick_mode/off
+   映射：关闭常载模式
+
+
+*157.函数名 math:if-raycast
+   输入：执行位置
+         执行朝向
+	 执行实体
+
+   输出：执行实体在记分板result的分数
+
+   映射：作射线经过执行位置，方向与执行朝向相同，若射线穿过执行实体的碰撞箱，输出1
+         否则，输出0
+
+   定义碰撞箱：执行实体的记分板：d代表沿x轴长度一半，放大100000倍
+                                 h代表沿y轴高度，放大100000倍
+				 l代表沿z轴长度一半，放大100000倍
+	      
+	       可以打开常载模式，生物的碰撞箱数据自动加载
+	       为生物添加标签 math.dhl防止自动加载数据
+   
+
+      执行：
+
+        summon area_effect_cloud 0.0 0.0 0.0 {Tags:["test"]}
+	scoreboard players set @e[tag=test,limit=1] d 50000
+	scoreboard players set @e[tag=test,limit=1] h 100000
+	scoreboard players set @e[tag=test,limit=1] l 50000
+	execute positioned 0.0 0.0 -10.0 rotated 0.0 0.0 as @e[tag=test,limit=1] run function math:if-raycast
+	scoreboard players get @e[tag=test,limit=1] result
+	kill @e[tag=test]
+
+      输出结果为1
+
+
+*158.函数名 math:eyepos
+   输入：执行实体
+
+   输出：带有标签result的实体
+
+   映射：带有标签result的实体移除标签result，获取执行实体眼睛的位置，召唤输出
+
+
+
+*159.函数名 math:delta_xyz
+   输入：执行实体和执行位置
+
+   输出：result0 int
+         result1 int
+	 result2 int
+
+   映射：获取执行实体与执行位置的坐标差，放大10000倍，输出
+
+
+
+*160.函数名 math:3get-length
+   输入：执行实体与执行坐标
+
+   输出：result int
+
+   映射：计算执行者与执行坐标的距离，放大1000倍，输出
+
+
+      执行：summon area_effect_cloud 0.0 0.0 0.0 {Tags:["tmp"]}
+            execute as @e[tag=tmp] positioned ^ ^ ^5 run function math:3get-length
+	    scoreboard players get result int
+	    kill @e[tag=tmp]
+        
+	
+
+      输出结果为5000

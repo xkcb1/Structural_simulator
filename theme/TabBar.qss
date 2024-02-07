@@ -1,0 +1,103 @@
+QTabWidget::pane {
+    border: 1px solid rgba(63, 64, 66, 1.000);
+    border-radius: 4px
+}
+
+QTabBar {
+    qproperty-drawBase: 0
+}
+
+QTabBar::close-button {
+    image: url(C:/Users/Administrator/.cache/qdarktheme/v2.1.0/close_e1e5e9_0.svg)
+}
+
+QTabBar::close-button:hover {
+    background: rgba(255, 255, 255, 0.145);
+    border-radius: 4px
+}
+
+QTabBar::close-button: !selected {
+    image: url(C:/Users/Administrator/.cache/qdarktheme/v2.1.0/close_e4e7eb99_0.svg)
+}
+
+QTabBar::close-button:disabled {
+    image: url(C:/Users/Administrator/.cache/qdarktheme/v2.1.0/close_e4e7eb66_0.svg)
+}
+
+QTabBar::tab {
+    padding: 3px;
+    border-style: solid
+}
+
+QTabBar::tab:hover,
+QTabBar::tab:selected:hover:enabled {
+    background: rgba(255, 255, 255, 0.094)
+}
+
+QTabBar::tab:selected:enabled {
+    color: rgba(138, 180, 247, 1.000);
+    background: rgba(255, 255, 255, 0.000);
+    border-color: rgba(138, 180, 247, 1.000)
+}
+
+QTabBar::tab:selected:disabled,
+QTabBar::tab:only-one:selected:enabled {
+    border-color: rgba(63, 64, 66, 1.000)
+}
+
+QTabBar::tab:top {
+    border-bottom-width: 2px;
+    margin: 3px 6px 0 0;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px
+}
+
+QTabBar::tab:bottom {
+    border-top-width: 2px;
+    margin: 0 6px 3px 0;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px
+}
+
+QTabBar::tab:left {
+    border-right-width: 2px;
+    margin: 0 0 6px 3px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px
+}
+
+QTabBar::tab:right {
+    border-left-width: 2px;
+    margin-bottom: 6px;
+    margin: 0 3px 6px 0;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px
+}
+
+QTabBar::tab:top:first,
+QTabBar::tab:top:only-one,
+QTabBar::tab:bottom:first,
+QTabBar::tab:bottom:only-one {
+    margin-left: 2px
+}
+
+QTabBar::tab:top:last,
+QTabBar::tab:top:only-one,
+QTabBar::tab:bottom:last,
+QTabBar::tab:bottom:only-one {
+    margin-right: 2px
+}
+
+QTabBar::tab:left:first,
+QTabBar::tab:left:only-one,
+QTabBar::tab:right:first,
+QTabBar::tab:right:only-one {
+    margin-top: 2px
+}
+
+QTabBar::tab:left:last,
+QTabBar::tab:left:only-one,
+QTabBar::tab:right:last,
+QTabBar::tab:right:only-one {
+    margin-bottom: 2px
+}

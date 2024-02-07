@@ -1,0 +1,8 @@
+<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" viewBox="0 0 215 215" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(-30, -15)">
+        <!-- 路径数据中的坐标值加上 10 -->
+        <path d="M110 40H50c-11.1 0-20 8.9-20 20v120c0 11.097 9.03 20 20 20h160c11.097 0 20-8.903 20-20V80c0-11.097-8.903-20-20-20h-80l-20-20z" fill="#FFD769" fill-rule="nonzero" style="fill:skyblue"/>
+        <!-- 矩形的 x 坐标也加上 10，同时调整 y 坐标以保持图形外观 -->
+        <rect x="118.5" y="169.15" width="128.77" height="38.36" ry=".844" style="fill:lightgray;paint-order:fill markers stroke;stroke-width:0"/>
+    </g>
+</svg>
