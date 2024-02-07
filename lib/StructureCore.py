@@ -50,6 +50,14 @@ orientation_int = {
     'up': 4,
     'down': 5,
 }
+orientation_str = {
+    0: 'east',
+    1: 'south',
+    2: 'west',
+    3: 'north',
+    4: 'up',
+    5: 'down',
+}
 horizontal_int = [0, 1, 2, 3]
 vertical_int = [4, 5]
 # 不同的朝向的对应标志位

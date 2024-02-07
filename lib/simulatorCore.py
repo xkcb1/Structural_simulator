@@ -102,9 +102,11 @@ class StructureSimulatorCore:
 
                     '''
                     jigsawPos = pos + np.array(jigsaw['pos'])  # 旧的jigsaw的绝对坐标
+
                     # 计算与其连接的jigsaw的绝对坐标
                     NextjigsawPos = pos + \
                         np.array(canConnectJigsaw['jigsaw'][0]["pos"])
+
                     print(canConnectJigsaw['offset'])
 
                     # self.Generate(getCanUseNbtFile)
@@ -173,8 +175,9 @@ class StructureSimulatorCore:
 
 
 def test():
+    os.system('cls')
     TestJson = structure(
-        r'c:\Users\LENOVO\Desktop\datapack_example\pozojsplainsvillages-v1-2\data\minecraft\worldgen\structure\village_plains.json')
+        r'C:\Users\Administrator\Desktop\better_village\data\minecraft\worldgen\structure\village_plains.json')
     TEST = StructureSimulatorCore(TestJson)
     print(TEST.similator())
 
