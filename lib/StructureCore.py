@@ -1,9 +1,12 @@
+from typing import overload
 import dask.array as da
 import json
 import random
 from typing import *
 import nbtlib
 import typing
+
+import numpy as np
 
 
 class Color:
@@ -34,6 +37,8 @@ class Color:
 def chebyshev_distance_3d(point1, point2=[0, 0, 0]) -> Union[int, float]:
     '''
     计算最大切比雪夫距离
+    max_distance_from_center <= 128|116
+    计算最大切比雪夫距离是针对jigsaw的，而不是针对NbtFile的
     '''
     return max(abs(point1[0] - point2[0]), abs(point1[1] - point2[1]), abs(point1[2] - point2[2]))
 
@@ -75,6 +80,20 @@ orientation_dict = {
     "up_south": (4, 1),
     "up_west": (4, 2),
     "west_up": (1, 4),
+}
+orientation_dict_str = {
+    (5, 0): "down_east",
+    (5, 3): "down_north",
+    (5, 1): "down_south",
+    (5, 2): "down_west",
+    (0, 4): "east_up",
+    (3, 4): "north_up",
+    (2, 4): "south_up",
+    (4, 0): "up_east",
+    (4, 3): "up_north",
+    (4, 1): "up_south",
+    (4, 2): "up_west",
+    (1, 4): "west_up",
 }
 # 相对朝向获取字典
 To_horizontal = {
@@ -325,7 +344,7 @@ class structure:
             self.use_expansion_hack = JsonFile['use_expansion_hack']
         except:
             self.use_expansion_hack = False
-        self.max_distance_from_center = JsonFile['max_distance_from_center']
+        self.max_distance_from_center: int = JsonFile['max_distance_from_center']
         self.terrain_adaptation = JsonFile['max_distance_from_center']
         # 初始模板池
         self._NAMESPACE_: str = self.start_pool.split(':')[
@@ -346,7 +365,6 @@ class jigsaw:
 
 
 '''
-
 结构集(structure_set) 会对应某一个 已配置结构地物(structure)
 已配置结构地物(structure) 会 包含一个 起始(start)模板(template)
 每一个 模板(template) 会包含 数个不同权重的 结构文件(NbtFile)
@@ -362,7 +380,6 @@ class jigsaw:
     ↑   [3] 解析 结构文件(NbtFile) 获取包含的所有 结构方块(jigsaw)
     ↑   ↓
       ← [4] 解析 每一个结构方块(jigsaw) 分别获取他们对应的模板池名字(template)
-
 
 
 已配置结构地物放在worldgen->structure里(json)
@@ -485,34 +502,40 @@ legacy_single_pool_element不会生成结构模板中的空气方块，
 
 
 class World:
-    def __init__(self, shape=(0, 0, 0, 3)):
-        self._World_ = da.full(shape, fill_value=-1, dtype=int)
+    def __init__(self):
+        self._World_ = {}
 
-    def fill(self, pos: tuple[int, int, int], size: tuple[int, int, int], NbtFileName: int, blockState: int, ColorIndex: int) -> bool:
+    @overload
+    def fill(self, pos: tuple[int, int, int], size: tuple[int, int, int], NbtFileIndex: int, blockState: int, ColorIndex: int) -> bool:
         ...
 
-    def fill(self, x: int, y: int, z: int, dx: int, dy: int, dz: int, NbtFileName: int, blockState: int, ColorIndex: int) -> bool:
+    @overload
+    def fill(self, x: int, y: int, z: int, dx: int, dy: int, dz: int, NbtFileIndex: int, blockState: int, ColorIndex: int) -> bool:
         ...
 
+    @overload
     def testforblocks(self, pos: tuple[int, int, int], size: tuple[int, int, int]) -> bool:
         ...
 
+    @overload
     def testforblocks(self, x: int, y: int, z: int, dx: int, dy: int, dz: int) -> bool:
         ...
 
     def fill(self, *args):
         if len(args) == 5 or len(args) == 9:
             if len(args) == 5:
-                pos, size, NbtFileName, blockState, ColorIndex = args
+                pos, size, NbtFileIndex, blockState, ColorIndex = args
                 x, y, z = pos
                 dx, dy, dz = x + size[0], y + size[1], z + size[2]
             elif len(args) == 9:
-                x, y, z, dx, dy, dz, NbtFileName, blockState, ColorIndex = args
+                x, y, z, dx, dy, dz, NbtFileIndex, blockState, ColorIndex = args
             if not self.testforblocks(x, y, z, dx, dy, dz):
                 # 如果检查是否重叠为 False：没有重叠，则填充并返回填充成功 True
-                self._World_[x:dx, y:dy, z:dz, 0] = ColorIndex
-                self._World_[x:dx, y:dy, z:dz, 1] = NbtFileName
-                self._World_[x:dx, y:dy, z:dz, 2] = blockState
+                for PosX in range(x, dx):
+                    for PosY in range(y, dy):
+                        for PosZ in range(z, dz):
+                            self._World_[(PosX, PosY, PosZ)] = (
+                                ColorIndex, NbtFileIndex, blockState)
                 return True
             else:
                 # 否则返回 False 填充失败
@@ -522,17 +545,51 @@ class World:
                              len(args), ', must be 5 or 9', Color.END, sep='')
             raise ValueError('Invalid arguments')
 
-    def setblock(self, x, y, z, NbtFileName: int, blockState: int, ColorIndex: int):
-        self._World_[x, y, z, 0] = ColorIndex
-        self._World_[x, y, z, 1] = NbtFileName
-        self._World_[x, y, z, 2] = blockState
+    def setblock(self, x, y, z, NbtFileIndex: int, blockState: int, ColorIndex: int):
+        self._World_[(x, y, z)] = (ColorIndex, NbtFileIndex, blockState)
 
     def testforblocks(self, *args):
         if len(args) == 2:
             pos, size = args
             x, y, z = pos
             dx, dy, dz = x + size[0], y + size[1], z + size[2]
-            return (self._World_[x:dx, y:dy, z:dz] != -1).any().compute()
         elif len(args) == 6:
             x, y, z, dx, dy, dz = args
-            return (self._World_[x:dx, y:dy, z:dz] != -1).any().compute()
+        for PosX in range(x, dx):
+            for PosY in range(y, dy):
+                for PosZ in range(z, dz):
+                    if (PosX, PosY, PosZ) in self._World_:
+                        return False
+        return True
+
+
+def rotate_point(point, axis, angle_param):
+    """
+    根据旋转角度参数和旋转轴计算点的新位置。
+
+    参数：
+    point：要旋转的点的坐标，形如(x, y, z)
+    axis：旋转轴的坐标，形如(x, y, z)
+    angle_param：旋转角度参数，取值范围为0, 1, 2, 3，每个参数代表90度的顺时针旋转
+
+    返回值：
+    新位置的坐标，形如(x_new, y_new, z_new)
+    """
+    # 计算实际的旋转角度
+    angle = angle_param % 4 * 90
+    # 将角度转换为弧度
+    angle_radians = np.radians(angle)
+    # 计算旋转矩阵
+    rotation_matrix = np.array([[np.cos(angle_radians), 0, np.sin(angle_radians)],
+                                [0, 1, 0],
+                                [-np.sin(angle_radians), 0, np.cos(angle_radians)]])
+    # 计算点相对于旋转轴的向量
+    relative_vector = np.array(point) - np.array(axis)
+    # 应用旋转矩阵
+    rotated_vector = np.dot(rotation_matrix, relative_vector)
+    # 将旋转后的向量加回到旋转轴上
+    new_position = np.array(axis) + rotated_vector
+    NewPoint_ = (round(new_position[0]), round(
+        new_position[1]), round(new_position[2]))
+    # 返回新位置的坐标，并转换为整数类型
+    return NewPoint_
