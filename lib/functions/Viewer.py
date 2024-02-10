@@ -1,3 +1,4 @@
+from lib.NbtTree import TreePureNbtToObj
 from lib.Widgets.comboBox import PureLabel
 from lib.Widgets.menu import PureRoundedBorderMenu
 from lib.Widgets.minecraftBlockListWidgets import BlockListWidget
@@ -168,14 +169,14 @@ class Viewer(QWidget):
         self.ChooseColorInit()
         self.ChooseColor.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChooseColor.setFixedHeight(21)
+        self.ChooseColor.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChooseColor)
         # 选择显示模式
         self.ChoosePicker = QToolButton()
         self.ChoosePickerInit()
         self.ChoosePicker.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChoosePicker.setFixedHeight(21)
+        self.ChoosePicker.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChoosePicker)
         # 是否使用默认背景色
         self.IfUseDefaultBG_color = QCheckBox()
@@ -208,14 +209,14 @@ class Viewer(QWidget):
         self.ChooseColorInit()
         # self.ChooseColor.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChooseColor.setFixedHeight(21)
+        self.ChooseColor.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChooseColor)
         # 选择显示模式
         self.ChoosePicker = QToolButton()
         self.ChoosePickerInit()
         self.ChoosePicker.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChoosePicker.setFixedHeight(21)
+        self.ChoosePicker.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChoosePicker)
         # 是否使用默认背景色
         self.IfUseDefaultBG_color = QCheckBox()
@@ -590,7 +591,8 @@ Set view shading mode : rendered</a>''')
             self.camera.SetClippingRange(-1000, 1000)
             self.renderer.Render()
             self.renderer.ResetCamera()
-            self.iren.Initialize()
+            # self.iren.Initialize()
+            self.iren.Render()
 
     def viewB(self):
         if self.ViewMode == 'B':
@@ -606,24 +608,25 @@ Set view shading mode : rendered</a>''')
             self.camera.ParallelProjectionOff()
             self.renderer.Render()
             self.renderer.ResetCamera()
-            self.iren.Initialize()
+            # self.iren.Initialize()
+            self.iren.Render()
 
     def View_reset(self):
         self.camera.SetPosition(-15, 15, -15)
         self.camera.SetViewUp(0, 2, 0)
         self.camera.SetFocalPoint(0, 0, 0)
-        self.iren.Initialize()
+        self.iren.Render()
         self.renderer.Render()
 
     def Zoom_add(self):
         self.camera.Zoom(1.1)
         self.renderer.Render()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def zoom_reduce(self):
         self.camera.Zoom(0.9)
         self.renderer.Render()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def SeeX(self):
         print('seeX')
@@ -631,7 +634,7 @@ Set view shading mode : rendered</a>''')
         self.camera.SetFocalPoint(2, 0, 0)
         self.camera.SetViewUp(0, 2, 0)
         self.renderer.ResetCamera()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def SeeY(self):
         print('seeY')
@@ -639,7 +642,7 @@ Set view shading mode : rendered</a>''')
         self.camera.SetFocalPoint(0, 2, 0)
         self.camera.SetViewUp(0, 0, 2)
         self.renderer.ResetCamera()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def SeeZ(self):
         print('seeZ')
@@ -647,7 +650,7 @@ Set view shading mode : rendered</a>''')
         self.camera.SetFocalPoint(0, 0, 2)
         self.camera.SetViewUp(0, 2, 0)
         self.renderer.ResetCamera()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def read_cubemap(self, cubemap):
         """
@@ -676,6 +679,8 @@ Set view shading mode : rendered</a>''')
 
     def ChoosePickerInit(self):
         self.ChoosePicker.setPopupMode(QToolButton.InstantPopup)
+        self.ChoosePicker.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.ChoosePicker.setIcon(QIcon('img/toolbar/d_Tilemap Icon.png'))
         self.ChoosePicker.setStyleSheet('padding-right:9px;padding-left:4px;')
         self.pikerMenu = PureRoundedBorderMenu(self)
         self.pikerMenu.setStyleSheet('''
@@ -810,7 +815,8 @@ Set view shading mode : rendered</a>''')
     def ChooseColorInit(self):
         # 颜色选择器初始化
         self.ChooseColor.setPopupMode(QToolButton.InstantPopup)
-        self.ChooseColor.setStyleSheet('padding-right:9px;padding-left:2px;')
+        self.ChooseColor.setStyleSheet('padding-right:8px;')
+        self.ChooseColor.setFixedSize(35, 20)
         self.colorChooseMenu = PureRoundedBorderMenu(self)
         self.colorChooseMenu.setStyleSheet('''
                             QMenu{padding:0px !important;border-top-left-radius:0px !important;}''')
@@ -937,7 +943,7 @@ Set view shading mode : rendered</a>''')
             self.renderer.SetBackground(1.0, 1.0, 1.0)
             self.renderer.SetBackground2(0.729, 0.8078, 0.92157)
             self.renderer.SetGradientBackground(1)
-            self.iren.Initialize()
+            self.iren.Render()
 
         elif this == 'afternoon':
             self.renderer.SetBackground(0.4, 0.4, 0.4)
@@ -1207,9 +1213,7 @@ Set view shading mode : rendered</a>''')
                         break
                     # 检查获取到的对象是否是vtkActor
                     if isinstance(actor, vtk.vtkActor):
-                        # 位移矫正
-                        actor.SetPosition(
-                            int((48 - int(nbtData['size'][0]))/2), 0, int((48 - int(nbtData['size'][2]))/2))
+                        # 不需要位移矫正
                         # 获取vtkActor的vtkPolyData
                         poly_data = actor.GetMapper().GetInput()
                         # 完成映射表记录
@@ -1225,8 +1229,6 @@ Set view shading mode : rendered</a>''')
                         # 创建一个外边框的actor
                         actor.blockName = self.Actor_List_Sort[ActorCount]
                         actor.outline_actor = vtk.vtkActor()
-                        actor.outline_actor.SetPosition(
-                            int((48 - int(nbtData['size'][0]))/2), 0, int((48 - int(nbtData['size'][2]))/2))
                         actor.outline_actor.SetMapper(outline_mapper)
                         actor.outline_actor.GetProperty().SetColor(1, 0.522, 0)  # 橙色
                         actor.outline_actor.GetProperty().SetLineWidth(2)  # 线宽为2
@@ -1369,6 +1371,29 @@ Set view shading mode : rendered</a>''')
         print(filePath)
         self.openNbtFileWithPath(filePath)
 
+    def openNbtFileWithPath(self, filePath):
+        # 先获取此页面里有没有文件浏览器，nbt视图，obj视图
+        _, file_extension = os.path.splitext(filePath)
+        if file_extension == '.nbt':
+            # 如果是nbt文件
+            nbtData = nbtlib.load(filePath)
+            for _pure_window_ in self._parent_.Page_Index[str(self._window_.page)]:
+                if _pure_window_.Wtype == 'NBT视图':
+                    self.parent = self._parent_
+                    TreePureNbtToObj(
+                        filePath, {"0": _pure_window_.ThisWindowWidget.treeView}, self)
+                elif _pure_window_.Wtype == '文件浏览器':
+                    directory = os.path.dirname(
+                        filePath).replace('\\', '/')
+                    _pure_window_.ThisWindowWidget.SystemChangeFolderPath(
+                        directory)
+
+                elif _pure_window_.Wtype == '结构信息':
+                    self._parent_.objectLoader.loadSingal.emit(
+                        nbtData, filePath, _pure_window_.ThisWindowWidget.objectView)
+            # 在此窗口内加载此nbt文件
+            self._3D_viewer_(nbtData, filePath)
+
     def bottomWidgetInit(self) -> None:
         self.bottomLayout = QVBoxLayout(self.BottomWidget)
         self.bottomLayout.setContentsMargins(3, 0, 3, 0)
@@ -1404,7 +1429,7 @@ Set view shading mode : rendered</a>''')
             else:
                 self.renderer.SetBackground(64/255, 64/255, 64/255)
                 self.renderer.SetBackground2(64/255, 64/255, 64/255)
-            self.iren.Initialize()
+            self.iren.Render()
             self.renderer.Render()
 
         else:

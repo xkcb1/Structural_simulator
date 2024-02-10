@@ -35,15 +35,16 @@ class NbtTreeThread(QThread):   # 创建线程类
         # run objects functions
         # 更新 Objects 对象列表
         if self.have_viewer == True:
-            self.parent.runObjects(nbt_file)
+            self.parent.runObjects(nbt_file, self.File)
             # 更新 3D viewer 视图
             for vtkwidget in self.parent._mainVtk_:
                 print('load model in ', vtkwidget, self.File)
                 try:
                     vtkwidget._3D_viewer_(nbt_file, self.File)
                 except:
-                    formatted_lines = traceback.format_exc()
-                    print(formatted_lines)
+                    # formatted_lines = traceback.format_exc()
+                    # print(formatted_lines)
+                    pass
         print('[!] : finished Thread -> NbtTreeThread')
         return
 
@@ -66,7 +67,7 @@ class NBTLastFileThread(QThread):   # 创建线程类
         # run objects functions
         # 更新 Objects 对象列表
         if nbt_file != None:
-            self.parent.runObjects(nbt_file)
+            self.parent.runObjects(nbt_file, self.File)
             # 更新 3D viewer 视图
             LastNBT = LastNBTFile(self.Objpath, nbt_file)
             self.parent.lastNBT.LastNbtSignal.emit(LastNBT)

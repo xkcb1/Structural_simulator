@@ -129,14 +129,14 @@ class Simulator(QWidget):
         self.ChooseColorInit()
         self.ChooseColor.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChooseColor.setFixedHeight(21)
+        self.ChooseColor.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChooseColor)
         # 选择显示模式
         self.ChoosePicker = QToolButton()
         self.ChoosePickerInit()
         self.ChoosePicker.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChoosePicker.setFixedHeight(21)
+        self.ChoosePicker.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChoosePicker)
         # 是否使用默认背景色
         self.IfUseDefaultBG_color = QCheckBox()
@@ -169,14 +169,14 @@ class Simulator(QWidget):
         self.ChooseColorInit()
         # self.ChooseColor.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChooseColor.setFixedHeight(21)
+        self.ChooseColor.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChooseColor)
         # 选择显示模式
         self.ChoosePicker = QToolButton()
         self.ChoosePickerInit()
         self.ChoosePicker.clicked.connect(self.selectionchange)
         # 添加进自定义布局
-        self.ChoosePicker.setFixedHeight(21)
+        self.ChoosePicker.setFixedHeight(20)
         self._window_.PageLayout.addWidget(self.ChoosePicker)
         # 是否使用默认背景色
         self.IfUseDefaultBG_color = QCheckBox()
@@ -481,7 +481,7 @@ Set view shading mode : rendered</a>''')
             self.camera.SetClippingRange(-1000, 1000)
             self.renderer.Render()
             self.renderer.ResetCamera()
-            self.iren.Initialize()
+            self.iren.Render()
 
     def viewB(self):
         if self.ViewMode == 'B':
@@ -497,24 +497,24 @@ Set view shading mode : rendered</a>''')
             self.camera.ParallelProjectionOff()
             self.renderer.Render()
             self.renderer.ResetCamera()
-            self.iren.Initialize()
+            self.iren.Render()
 
     def View_reset(self):
         self.camera.SetPosition(-15, 15, -15)
         self.camera.SetViewUp(0, 2, 0)
         self.camera.SetFocalPoint(0, 0, 0)
-        self.iren.Initialize()
+        self.iren.Render()
         self.renderer.Render()
 
     def Zoom_add(self):
         self.camera.Zoom(1.1)
         self.renderer.Render()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def zoom_reduce(self):
         self.camera.Zoom(0.9)
         self.renderer.Render()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def SeeX(self):
         print('seeX')
@@ -522,7 +522,7 @@ Set view shading mode : rendered</a>''')
         self.camera.SetFocalPoint(2, 0, 0)
         self.camera.SetViewUp(0, 2, 0)
         self.renderer.ResetCamera()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def SeeY(self):
         print('seeY')
@@ -530,7 +530,7 @@ Set view shading mode : rendered</a>''')
         self.camera.SetFocalPoint(0, 2, 0)
         self.camera.SetViewUp(0, 0, 2)
         self.renderer.ResetCamera()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def SeeZ(self):
         print('seeZ')
@@ -538,7 +538,7 @@ Set view shading mode : rendered</a>''')
         self.camera.SetFocalPoint(0, 0, 2)
         self.camera.SetViewUp(0, 2, 0)
         self.renderer.ResetCamera()
-        self.iren.Initialize()
+        self.iren.Render()
 
     def read_cubemap(self, cubemap):
         """
@@ -567,7 +567,9 @@ Set view shading mode : rendered</a>''')
 
     def ChoosePickerInit(self):
         self.ChoosePicker.setPopupMode(QToolButton.InstantPopup)
-        self.ChoosePicker.setStyleSheet('padding-right:9px;padding-left:4px;')
+        self.ChoosePicker.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.ChoosePicker.setIcon(QIcon('img/toolbar/d_Tilemap Icon.png'))
+        self.ChoosePicker.setStyleSheet('padding-right:8px;')
         self.pikerMenu = PureRoundedBorderMenu(self)
         self.pikerMenu.setStyleSheet('''
                             QMenu{padding:0px !important;border-top-left-radius:0px !important;}''')
@@ -828,7 +830,7 @@ Set view shading mode : rendered</a>''')
             self.renderer.SetBackground(1.0, 1.0, 1.0)
             self.renderer.SetBackground2(0.729, 0.8078, 0.92157)
             self.renderer.SetGradientBackground(1)
-            self.iren.Initialize()
+            self.iren.Render()
 
         elif this == 'afternoon':
             self.renderer.SetBackground(0.4, 0.4, 0.4)
@@ -954,7 +956,7 @@ Set view shading mode : rendered</a>''')
             else:
                 self.renderer.SetBackground(64/255, 64/255, 64/255)
                 self.renderer.SetBackground2(64/255, 64/255, 64/255)
-            self.iren.Initialize()
+            self.iren.Render()
             self.renderer.Render()
 
         else:

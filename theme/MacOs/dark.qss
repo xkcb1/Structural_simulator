@@ -20,6 +20,13 @@ QLineEdit {
     color: #FFFFFF;
 }
 /*combobox*/
+
+
+QToolButton::menu-indicator {
+    image: url(img/downarrow_hlt_dark.svg);
+    width: 15px;
+    height: 15px;
+}
 QComboBox,#Choose_Window,QToolButton {
     background-color: #282828;
     border-radius: 4px;

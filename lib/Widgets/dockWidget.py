@@ -75,13 +75,13 @@ class Pure_QDockWidget(QDockWidget):
         #
         self.ViewButton = QPushButton("视图")  # 视图按钮
         self.MakeViewFunction()
-        self.ViewButton.setFixedSize(40, 21)
+        self.ViewButton.setFixedSize(40, 20)
         self.ViewButton.setObjectName('ButtonMenuBar')
         self.ViewButton.clicked.connect(self.viewClicked)
         #
         self.SettingButton = QPushButton("设置")  # 视图按钮
         self.MakeSettingFunction()
-        self.SettingButton.setFixedSize(40, 21)
+        self.SettingButton.setFixedSize(40, 20)
         self.SettingButton.setObjectName('ButtonMenuBar')
         self.SettingButton.clicked.connect(self.settingClicked)
         #
@@ -96,7 +96,8 @@ class Pure_QDockWidget(QDockWidget):
             QIcon(self._parent_.windowType[self.Wtype][0]))
         self.Choose_WindowType.clicked.connect(self.changeWindow)
         self.TopMenu_layout.addWidget(self.Choose_WindowType)
-        self.Choose_WindowType.setFixedSize(35, 21)
+        self.Choose_WindowType.setStyleSheet('padding-right:8px;')
+        self.Choose_WindowType.setFixedSize(35, 20)
         self.MakeChooseButton()
         #
         self.PageLayout = QHBoxLayout(self.TopMenu_2)  # 每个页面自定义的布局部分

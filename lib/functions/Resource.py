@@ -571,6 +571,17 @@ class Resource(QWidget):
             self.fileTreeView.setRootIndex(
                 self.fileTreeView.model_.index(folder_path))
 
+    def SystemChangeFolderPath(self, path):
+        '''
+        系统改变目录，从外部调用
+        '''
+        self.AssetMainWidget.setRootPath(path)
+        self.PathWidget.setRootPath(path)
+        self.thisPath = path
+        self.check_edittime_file(path)
+        self.fileTreeView.setRootIndex(
+            self.fileTreeView.model_.index(path))
+
     def fileTreeViewDoubleClicked(self, index):
         '''
         [2] 在fileTreeView里改变目录

@@ -1,7 +1,10 @@
+from qframelesswindow import FramelessMainWindow, FramelessDialog
 from PyQt5.QtCore import Qt
 from lib.NbtTree import AddItemThread
+from lib.Widgets.commandPalette import PureCommandPalette
 from lib.Widgets.menu import PureRoundedBorderMenu
 from lib.Widgets.dockWidget import Pure_QDockWidget
+from lib.Widgets.newFramelessWindow import NewFramelessWindow
 from lib.Widgets.startPanel import PAboutWidget, PStartWidget
 from lib.base import *
 from lib.base import _Thread_
@@ -19,10 +22,17 @@ from lib.functions.Setting import Setting
 from lib.functions.Simulator import Simulator
 from lib.functions.Terminal import Terminal
 from lib.functions.Viewer import Viewer
+from lib.functions._Setting import _Settings
+from lib.functions.White import White
 from lib.core.setting import *
 import sys
+import cProfile
+import pstats
+import psutil
+import os
+import time
+#
 
-from lib.functions.White import White
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
 QApplication.setHighDpiScaleFactorRoundingPolicy(
     Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
@@ -35,6 +45,30 @@ SELF = None
 From <BC project - Pure(4)>
 2023.11.16
 '''
+
+
+class Color:
+    # 颜色
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    LIGHT_GRAY = '\033[90m'  # 浅灰色
+    LIGHT_RED = '\033[91m'  # 浅红色
+    LIGHT_GREEN = '\033[92m'  # 浅绿色
+    LIGHT_YELLOW = '\033[93m'  # 浅黄色
+    LIGHT_BLUE = '\033[94m'  # 浅蓝色
+    LIGHT_MAGENTA = '\033[95m'  # 浅洋红色
+    LIGHT_CYAN = '\033[96m'  # 浅青色
+    LIGHT_WHITE = '\033[97m'  # 浅白色
+    # 字体样式
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
 
 
 class LoadMcaModel(QObject):
@@ -66,13 +100,47 @@ class ExpendNodes(QObject):
     expendSingal = pyqtSignal(QTreeWidgetItem)
 
 
+class LoadObjectWindow(QObject):
+    '''通过信号加载object窗口'''
+    loadSingal = pyqtSignal(nbtlib.tag.Compound, str, QTreeWidget)
+
+
+class MemoryThread(QThread):
+    memory_update = pyqtSignal(float)
+
+    def run(self):
+        while True:
+            # 获取当前系统的物理内存占用（字节为单位）
+            memory_bytes = psutil.Process().memory_info().rss
+            # 转换为 MB 单位
+            memory_mb = memory_bytes / (1024 * 1024)
+            self.memory_update.emit(memory_mb)
+            time.sleep(5)  # 每隔5秒获取一次内存占用
+
+
 class StructureViewer(QMainWindow):
     '''
-    StructureViewer Main Window
+StructureViewer Main Window
+
+__init__():
+    if appMode == 'Frameless':
+        super(FramelessMainWindow, self).__init__()
+    else:
+        super(StructureViewer, self).__init__()
     '''
 
-    def __init__(self, app, openPath, openFile):
-        super(StructureViewer, self).__init__()
+    def __init__(self, app, appMode, openPath, openFile):
+        if appMode == 'Frameless':
+            super(FramelessMainWindow, self).__init__()
+            self.setContentsMargins(2, 0, 2, 0)
+            self._isResizeEnabled = True
+            from lib.Widgets.titlebar import CustomTitleBar
+            self.setTitleBar(CustomTitleBar(self))
+        else:
+            super(StructureViewer, self).__init__()
+            self.setContentsMargins(1, 0, 1, 0)
+        self.appMode = appMode
+        print(Color.GREEN, 'open Application in mode:', self.appMode, Color.END)
         self.app = app
         self.openPath = openPath
         self.openFile_ = openFile
@@ -225,6 +293,7 @@ QDockWidget::float-button {
             '控制台': ['img/main_3/Designer.png', Console],
             'Nbt文件列表': ['img/main_3/Nbt.png', NbtFile],
             '模拟器分析视图': ['img/main_3/TerrainMaker.png', MapViewer],
+            '偏好设置': ['img/main_3/settings_7.png', _Settings],
         }
         self.Window_Save_Widget = {}  # 窗口储存字典
         for _dock_window_ in self.windowType:
@@ -242,6 +311,7 @@ QDockWidget::float-button {
                               '信息输出': ['img/main_3/ItemList.png', OutPutWidget],
                               '空白页面': ['img/main_3/White.png', White],
                               '控制台': ['img/main_3/Designer.png', Console],
+                              '偏好设置': ['img/main_3/settings_7.png', _Settings],
                               }
         self.simulator_Windows = {
             '导入设置': ['img/main_3/Attribute.png', Setting],
@@ -256,22 +326,30 @@ QDockWidget::float-button {
         # singal 2
         self.expendFunc = ExpendNodes()
         self.expendFunc.expendSingal.connect(self.expend_singal)
-        #
+        # singal 3
+        self.objectLoader = LoadObjectWindow()
+        self.objectLoader.loadSingal.connect(self.LoadObjectInOneWindow)
+        # set title
         self.setWindowTitle('Structure Studio')
         self.setWindowIcon(QIcon('img/earth_30_24.png'))
         '''
         some attitudes and setting or use mica style (windows)
         '''
-        # mica
-        self.setContentsMargins(1, 0, 1, 0)
         self.origPalette = QApplication.palette()
-        print('[!] : style :', QStyleFactory.keys())
         # load configuration
         self.thisTheme = 'default'
         self.loadConfig()
         self.setWindowStyle_mica()
         palette = QPalette()
-        palette.setColor(QPalette.Window, QColor(29, 29, 29))
+        palette.setColor(QPalette.Window, QColor(51, 52, 53))
+        self.setStyleSheet('''
+QMainWindow {
+    background-color:rgb(51, 52, 53);
+    background-image:url(img/mcEarth_black_40_300px.png);
+    background-position:center center;
+    background-repeat:no-repeat;
+}
+                           ''')
         self.setPalette(palette)
         self.show()
         self.app.processEvents()
@@ -314,39 +392,60 @@ QDockWidget::float-button {
 
     def moveEvent(self, event):
         # 主窗口移动时更新对话框位置
-        if self.startWindowClickEvent == False:
-            try:
-                main_window_rect = self.geometry()
-                self.startWindow.move(main_window_rect.center() -
-                                      self.startWindow.rect().center())
-            except:
-                pass
+        try:
+            if self.startWindowClickEvent == False:
+                try:
+                    main_window_rect = self.geometry()
+                    self.startWindow.move(main_window_rect.center() -
+                                          self.startWindow.rect().center())
+                except:
+                    pass
+        except:
+            pass
 
     def resizeEvent(self, event):
-        # 主窗口移动时更新对话框位置
-        if self.startWindowClickEvent == False:
-            try:
-                main_window_rect = self.geometry()
-                self.startWindow.move(main_window_rect.center() -
-                                      self.startWindow.rect().center())
-            except:
-                pass
+        try:
+            # 主窗口移动时更新对话框位置
+            if self.startWindowClickEvent == False:
+                try:
+                    main_window_rect = self.geometry()
+                    self.startWindow.move(main_window_rect.center() -
+                                          self.startWindow.rect().center())
+                except:
+                    pass
+            if self.appMode == 'Frameless':
+                self.spaceWidget.setFixedSize(
+                    self.width() - 550 - self.titleBar.minBtn.width()*3, 29)
+
+        except:
+            pass
 
     def eventFilter(self, obj, event):
-        if event.type() == QEvent.MouseButtonPress and self.startWindowClickEvent == False:
-            global_pos = event.globalPos()
-            local_pos = self.mapFromGlobal(global_pos)
-            if QRegion(int((self.width() - self.start_w) /
-                           2), int((self.height() - self.start_h)/2),
-                       self.start_w, self.start_h).contains(local_pos):
-                # 如果点击在区域内，则不处理
-                pass
+        try:
+            if event.type() == QEvent.MouseButtonPress and self.startWindowClickEvent == False:
+                global_pos = event.globalPos()
+                local_pos = self.mapFromGlobal(global_pos)
+                if QRegion(int((self.width() - self.start_w) /
+                               2), int((self.height() - self.start_h)/2),
+                           self.start_w, self.start_h).contains(local_pos):
+                    # 如果点击在区域内，则不处理
+                    pass
+                else:
+                    # 如果在区域外，则修改标识，并且隐藏启动界面
+                    self.startWindowClickEvent = True
+                    self.startWindow.hide()
+                    print('close start window')
+            if self.appMode == 'Frameless':
+
+                return super(FramelessMainWindow, self).eventFilter(obj, event)
             else:
-                # 如果在区域外，则修改标识，并且隐藏启动界面
-                self.startWindowClickEvent = True
-                self.startWindow.hide()
-                print('close start window')
-        return super(StructureViewer, self).eventFilter(obj, event)
+                return super(StructureViewer, self).eventFilter(obj, event)
+        except:
+            if self.appMode == 'Frameless':
+
+                return super(FramelessMainWindow, self).eventFilter(obj, event)
+            else:
+                return super(StructureViewer, self).eventFilter(obj, event)
 
     def PostValueToTerminal(self):
         global_vars = globals()
@@ -356,82 +455,12 @@ QDockWidget::float-button {
             for var_name, var_value in global_vars.items():
                 ipython_instance.user_ns[var_name] = var_value
 
-    def makeTabMenu(self):
-        '''
-        菜单栏tabWidget
-        '''
-        self.tabLayout = QHBoxLayout(self.menubar_)
-        self.menubar_.move(20, 20)
-        self.tabLayout.setContentsMargins(325, 0, 0, 0)
-        self.ThisPage = 0
-        #
-        self.MenuTabWidget = QTabWidget()
-        self.MenuTabWidget.setMovable(True)
-        self.MenuTabWidget.setContentsMargins(0, 0, 0, 0)
-        self.tabLayout.addWidget(self.MenuTabWidget)
-        #
-        self.MenuTabWidget.setFixedHeight(24)
-        # add tab 1
-        self.MenuTabWidget.addTab(QWidget(), QIcon(), '视图')
-        self.MenuTabWidget.setTabToolTip(
-            0, '预设窗口类型选项卡 : 视图\nPreset Window Type Tab: View')
-        # add tab 2
-        self.MenuTabWidget.addTab(QWidget(), QIcon(), '模拟器')
-        self.MenuTabWidget.setTabToolTip(
-            1, '预设窗口类型选项卡 : 模拟器\nPreset Window Type Tab: Simulator')
-        # add tab 3
-        self.MenuTabWidget.addTab(QWidget(), QIcon(), '工具')
-        self.MenuTabWidget.setTabToolTip(
-            2, '预设窗口类型选项卡 : 工具\nPreset Window Type Tab: Tools')
-        # add tab 4
-        self.MenuTabWidget.addTab(QWidget(), QIcon(), '调试')  # 终端
-        self.MenuTabWidget.setTabToolTip(
-            3, '预设窗口类型选项卡 : 调试\nPreset Window Type Tab: Debug')
-        # add tab +
-        self.MenuTabWidget.addTab(QWidget(), QIcon(), ' + ')
-        self.MenuTabWidget.setTabToolTip(
-            4, '新建窗口选项卡\nNew window tab')
-        self.MenuTabWidget.installEventFilter(ToolTipFilter(
-            self.MenuTabWidget, 300, ToolTipPosition.BOTTOM))
-        # connect
-        self.MenuTabWidget.currentChanged.connect(self.ClickMenuTab)
-
-    def ClickMenuTab(self):
-        '''
-        在主页面上切换选项卡
-        只在切换选项卡的时候检测现在页面上所有的窗口
-        '''
-        last_index = self.ThisPageIndex_int
-        getIndex = self.MenuTabWidget.currentIndex() + 1
-        self.ThisPageIndex_int = getIndex
-
-        # 获取现在的所有存在的窗口
-        if self.startWindowClickEvent:
-            dock_widgets = self.findChildren(QDockWidget)
-            for dock_widget in dock_widgets:
-                if dock_widget.isVisible() == False:
-                    # 如果这个窗口不可见
-                    try:
-                        # 尝试删除
-                        self.Page_Index[str(last_index)].remove(dock_widget)
-                    except:
-                        pass
-                else:
-                    # 如果有现在还可见的窗口
-                    if dock_widget not in self.Page_Index[str(last_index)]:
-                        self.Page_Index[str(last_index)].append(dock_widget)
-
-        print('change page :', getIndex)
-        # 隐藏
-        for hide_Window in self.Page_Index[str(last_index)]:
-            hide_Window.hide()
-        # 显示
-        for show_Window in self.Page_Index[str(getIndex)]:
-            show_Window.show()
-
     def loadNbtModelFunction(self, nbtData):
         for vtkWidget in self.vtkWindow:
-            self.vtkWindow[vtkWidget].loadNbtModelFunction(nbtData)
+            try:
+                self.vtkWindow[vtkWidget].loadNbtModelFunction(nbtData)
+            except:
+                pass
 
     def loadConfig(self):
         try:
@@ -478,6 +507,7 @@ QDockWidget::float-button {
             self.recent = []
 
     def closeEvent(self, event):
+        self.memory_thread.exit()
         self.config['w'] = self.width()
         self.config['h'] = self.height()
         self.config['x'] = self.x()
@@ -501,20 +531,24 @@ QDockWidget::float-button {
         pass
 
     def setWindowStyle_mica(self):
-        if platform.system() == 'Windows':
-            try:
-                # self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
-                hwnd = self.winId().__int__()
-                mode = MicaTheme.DARK
-                style = MicaStyle.DEFAULT
-                win32mica.ApplyMica(HWND=hwnd, Theme=mode, Style=style,
-                                    OnThemeChange=self.SystemThemeChange)
-                self.app.processEvents()
-            except:
-                print(f'cannot use Mica Style in {self.winId()}')
+        if self.appMode == 'native':
+            if platform.system() == 'Windows':
+                try:
+                    # self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
+                    hwnd = self.winId().__int__()
+                    mode = MicaTheme.DARK
+                    style = MicaStyle.DEFAULT
+                    win32mica.ApplyMica(HWND=hwnd, Theme=mode, Style=style,
+                                        OnThemeChange=self.SystemThemeChange)
+                    self.app.processEvents()
+                except:
+                    print(f'cannot use Mica Style in {self.winId()}')
+            else:
+                print(Color.YELLOW,
+                      f'System : {platform.system()} cannot use Mica Style in {self.winId()}', Color.END)
         else:
             print(
-                f'System : {platform.system()} cannot use Mica Style in {self.winId()}')
+                Color.YELLOW, f'[system] : {platform.system()} Use appMode : {self.appMode}', Color.END)
 
     def makeDockWindow(self):
         self.setDockOptions(self.dockOptions() | QMainWindow.AllowTabbedDocks)
@@ -666,41 +700,208 @@ QDockWidget::float-button {
         self.DockStyle = 'Graph'
         self.changeTheme(self.themeIndex)
 
+    def TopCommandPalette_init_(self, layout):
+        '''
+        显示顶部命令面板
+        '''
+        self.CommandPalette = PureCommandPalette(self)
+        layout.addWidget(self.CommandPalette)
+
+    def makeTabMenu(self):
+        '''
+        顶部菜单栏tabWidget
+        '''
+        if self.appMode == 'native':
+            self.tabLayout = QHBoxLayout(self.menubar_)
+            self.menubar_.move(20, 20)
+            self.tabLayout.setContentsMargins(325, 0, 0, 0)
+            self.ThisPage = 0
+            #
+            self.MenuTabWidget = QTabWidget()
+            self.MenuTabWidget.setFixedWidth(250)
+            self.MenuTabWidget.setMovable(True)
+            self.MenuTabWidget.setContentsMargins(0, 0, 0, 0)
+            self.tabLayout.addWidget(self.MenuTabWidget)
+            #
+            self.spaceWidget = QWidget()
+            self.spaceWidget.setObjectName('spaceWidget')
+            self.tabLayout.addWidget(self.spaceWidget)
+
+            self.spaceWidget_layout = QHBoxLayout(self.spaceWidget)
+            self.spaceWidget_layout.setContentsMargins(10, 1, 10, 1)
+            # 加载顶部命令面板
+            self.spaceWidget_layout.addStretch(1)
+            self.TopCommandPalette_init_(self.spaceWidget_layout)
+            self.spaceWidget_layout.addStretch(2)
+            #
+            self.MenuTabWidget.setFixedHeight(24)
+        else:
+            # self.appMode == 'Frameless'
+            self.tabWidget = QWidget(self.titleBar)
+            self.tabWidget.setFixedWidth(250)
+            self.tabWidget.setFixedHeight(29)
+            self.tabWidget.move(300, 0)
+            self.tabWidget.show()
+            self.tabLayout = QHBoxLayout(self.tabWidget)
+            self.tabLayout.setContentsMargins(0, 3, 0, 0)
+            self.ThisPage = 0
+            #
+            self.MenuTabWidget = QTabWidget()
+            self.MenuTabWidget.setMovable(True)
+            self.MenuTabWidget.setContentsMargins(0, 0, 0, 0)
+            self.tabLayout.addWidget(self.MenuTabWidget)
+            #
+            self.spaceWidget = QWidget(self.titleBar)
+            self.spaceWidget.setObjectName('spaceWidget')
+            self.spaceWidget.move(300+250, 0)
+            self.spaceWidget.setFixedSize(
+                self.width() - 550 - self.titleBar.minBtn.width()*3, 29)
+            self.spaceWidget_layout = QHBoxLayout(self.spaceWidget)
+            self.spaceWidget_layout.setContentsMargins(10, 5, 10, 2)
+            # 加载顶部命令面板
+            self.spaceWidget_layout.addStretch(1)
+            self.TopCommandPalette_init_(self.spaceWidget_layout)
+            self.spaceWidget_layout.addStretch(2)
+            self.spaceWidget.show()
+            #
+            self.MenuTabWidget.setFixedHeight(26)
+            self.titleBar.layout().setContentsMargins(0, 0, 0, 2)
+            # 间隔控件
+
+            self.titleBar.layout().insertStretch(0, 999)
+
+        # add tab 1
+        self.MenuTabWidget.addTab(QWidget(), QIcon(), '视图')
+        self.MenuTabWidget.setTabToolTip(
+            0, '预设窗口类型选项卡 : 视图\nPreset Window Type Tab: View')
+        # add tab 2
+        self.MenuTabWidget.addTab(QWidget(), QIcon(), '模拟器')
+        self.MenuTabWidget.setTabToolTip(
+            1, '预设窗口类型选项卡 : 模拟器\nPreset Window Type Tab: Simulator')
+        # add tab 3
+        self.MenuTabWidget.addTab(QWidget(), QIcon(), '工具')
+        self.MenuTabWidget.setTabToolTip(
+            2, '预设窗口类型选项卡 : 工具\nPreset Window Type Tab: Tools')
+        # add tab 4
+        self.MenuTabWidget.addTab(QWidget(), QIcon(), '调试')  # 终端
+        self.MenuTabWidget.setTabToolTip(
+            3, '预设窗口类型选项卡 : 调试\nPreset Window Type Tab: Debug')
+        # add tab +
+        self.MenuTabWidget.addTab(QWidget(), QIcon(), ' + ')
+        self.MenuTabWidget.setTabToolTip(
+            4, '新建窗口选项卡\nNew window tab')
+        self.MenuTabWidget.installEventFilter(ToolTipFilter(
+            self.MenuTabWidget, 300, ToolTipPosition.BOTTOM))
+        # connect
+        self.MenuTabWidget.currentChanged.connect(self.ClickMenuTab)
+
+    def ClickMenuTab(self):
+        '''
+        在主页面上切换选项卡
+        只在切换选项卡的时候检测现在页面上所有的窗口
+        '''
+        last_index = self.ThisPageIndex_int
+        getIndex = self.MenuTabWidget.currentIndex() + 1
+        self.ThisPageIndex_int = getIndex
+
+        # 获取现在的所有存在的窗口
+        if self.startWindowClickEvent:
+            dock_widgets = self.findChildren(QDockWidget)
+            for dock_widget in dock_widgets:
+                if dock_widget.isVisible() == False:
+                    # 如果这个窗口不可见
+                    try:
+                        # 尝试删除
+                        self.Page_Index[str(last_index)].remove(dock_widget)
+                    except:
+                        pass
+                else:
+                    # 如果有现在还可见的窗口
+                    if dock_widget not in self.Page_Index[str(last_index)]:
+                        self.Page_Index[str(last_index)].append(dock_widget)
+
+        print('change page :', getIndex)
+        # 隐藏
+        for hide_Window in self.Page_Index[str(last_index)]:
+            hide_Window.hide()
+        # 显示
+        for show_Window in self.Page_Index[str(getIndex)]:
+            show_Window.show()
+
     def makeTopMenu(self):  # 菜单栏部分
-        self.menubar_ = self.menuBar()
-        self.menubar_.setContentsMargins(0, 0, 0, 0)
-        self.menubar_.setFixedHeight(28)
+        if self.appMode == 'Frameless':
+            self.menubar_ = QMenuBar(self.titleBar)
+            self.menubar_.move(0, 0)
+            self.menubar_.setFixedSize(302, 31
+                                       )
+            self.menubar_.setStyleSheet('padding-top:5px;')
+            self.menubar_.show()
+            self.setMenuWidget(self.titleBar)
+
+        else:
+            self.menubar_ = self.menuBar()
+            self.menubar_.setFixedHeight(28)
+            self.menubar_.setContentsMargins(0, 0, 0, 0)
         # start menu bar
-        firstAction = QAction(
-            QIcon(f'img/appIcon/{self.Puretheme}/globe-fill.svg'), '', self)
-        firstAction.iconPath = 'globe-fill.svg'
-        firstAction.setToolTip('Structure Studio 0.0.1')
-        firstAction.installEventFilter(ToolTipFilter(
-            firstAction, 300, ToolTipPosition.BOTTOM))
-        self.changeIconList.append(firstAction)
-        self.menubar_.addAction(firstAction)
-        APP_menu = PureRoundedBorderMenu(self.menubar_)
-        APP_menu.setFixedWidth(200)
-        startPage = QAction('开始页面', self)
-        startPage.triggered.connect(self.PopupStartPage)
-        #
-        APP_menu.addAction(startPage)
-        aboutPage = QAction('关于 Structure Studio', self)
-        aboutPage.triggered.connect(self.AboutPage)
-        APP_menu.addAction(aboutPage)
-        APP_menu.addSeparator()
-        SysPage = QAction('系统设置', self)
-        SysPage.setIcon(QIcon('img/settings_xd.png'))
-        APP_menu.addAction(SysPage)
-        firstAction.setMenu(APP_menu)
+        if self.appMode == 'native':
+            pass
+        else:
+            firstAction = QAction(
+                QIcon(f'img/appIcon_1.png'), '', self)
+
+            firstAction.setToolTip('Structure Studio 0.0.1')
+            firstAction.installEventFilter(ToolTipFilter(
+                firstAction, 300, ToolTipPosition.BOTTOM))
+            self.changeIconList.append(firstAction)
+            self.menubar_.addAction(firstAction)
+            APP_menu = PureRoundedBorderMenu(self.menubar_)
+            APP_menu.setFixedWidth(200)
+            startPage = QAction('开始页面', self)
+            startPage.triggered.connect(self.PopupStartPage)
+            #
+            APP_menu.addAction(startPage)
+            aboutPage = QAction('关于 Structure Studio', self)
+            aboutPage.triggered.connect(self.AboutPage)
+            APP_menu.addAction(aboutPage)
+            APP_menu.addSeparator()
+            SysPage = QAction('系统设置', self)
+            SysPage.setIcon(
+                QIcon(f'img/appIcon/{self.Puretheme}/preferences.svg'))
+            SysPage.iconPath = 'preferences.svg'
+            self.changeIconList.append(SysPage)
+            APP_menu.addAction(SysPage)
+            firstAction.setMenu(APP_menu)
 
         ################################
-        FILE = ['新建',  '打开', '近期文件', '自动保存', None, '关闭']
-        FILE_FUNC = [self.openFile, print, print, print, print, self.close]
-        FILE_KEY = ['Ctrl+N', 'Ctrl+O', 'Ctrl+Shift+R', '', '', 'Ctrl+Q']
-        ICON_1 = ['img/toolbar/d_Collab.FileMoved.png', '', '', '', '',
-                  'img/toolbar/d_winbtn_mac_close_h@2x.png']
-        fileMenu = PureRoundedBorderMenu('文件(F)', self.menubar_)
+        FILE = ['新建',  '打开', '近期文件', '资源管理器', '自动保存', None, '关闭']
+        FILE_FUNC = [self.openFile, print, print,
+                     print, print, print, self.close]
+        FILE_KEY = ['Ctrl+N', 'Ctrl+O', 'Ctrl+Shift+R', '', '', '', 'Ctrl+Q']
+        ICON_1 = [f'img/appIcon/{self.Puretheme}/file.svg',
+                  f'img/appIcon/{self.Puretheme}/file_folder.svg',
+                  f'img/appIcon/{self.Puretheme}/file_folder.svg',
+                  f'img/appIcon/{self.Puretheme}/asset_manager.svg',
+                  f'img/appIcon/{self.Puretheme}/file_hidden.svg',
+                  '',
+                  f'img/appIcon/{self.Puretheme}/quit.svg']
+        fileMenu = PureRoundedBorderMenu('文件(&F)', self.menubar_)
+
+        if self.appMode == 'native':
+            startPage = QAction('开始页面', self)
+            startPage.triggered.connect(self.PopupStartPage)
+            #
+            fileMenu.addAction(startPage)
+            aboutPage = QAction('关于 Structure Studio', self)
+            aboutPage.triggered.connect(self.AboutPage)
+            fileMenu.addAction(aboutPage)
+            SysPage = QAction('系统设置', self)
+            SysPage.setIcon(
+                QIcon(f'img/appIcon/{self.Puretheme}/preferences.svg'))
+            SysPage.iconPath = 'preferences.svg'
+            self.changeIconList.append(SysPage)
+            fileMenu.addAction(SysPage)
+            fileMenu.addSeparator()
+
         for i in range(len(FILE)):
             if FILE[i] == None:
                 fileMenu.addSeparator()
@@ -709,19 +910,23 @@ QDockWidget::float-button {
                 Act.setShortcut(FILE_KEY[i])
                 Act.triggered.connect(FILE_FUNC[i])
                 Act.setIcon(QIcon(ICON_1[i]))
+                Act.iconPath = ICON_1[i].split('/')[-1]
+                self.changeIconList.append(Act)
                 fileMenu.addAction(Act)
         fileMenu.setFixedWidth(250)
         self.menubar_.addMenu(fileMenu)
 
         ################################
-        view = PureRoundedBorderMenu('视图(V)', self.menubar_)
+        view = PureRoundedBorderMenu('视图(&V)', self.menubar_)
         view.setFixedWidth(250)
         VIEW = ['窗口大小可调整', None,
-                '亮色主题 (light)', '深灰色主题 (deep gray)', '暗色主题 (dark)']
+                '亮色主题', '深灰色主题', '暗色主题']
         HVIEW_FUNC = [self.SetWindowFixSizeUsed, None,
                       lambda:self.changeTheme(1), lambda:self.changeTheme(2), lambda:self.changeTheme(0)]
         ICON_2 = ['', None,
-                  'img/toolbar/d_winbtn_win_max.png', 'img/toolbar/gray_win.png', 'img/toolbar/winbtn_win_max.png']
+                  'img/toolbar/d_winbtn_win_max.png',
+                  'img/toolbar/gray_win.png',
+                  'img/toolbar/winbtn_win_max.png']
         for i in range(len(VIEW)):
             if VIEW[i] == None:
                 view.addSeparator()
@@ -738,8 +943,8 @@ QDockWidget::float-button {
         view.addSeparator()
         # Window风格
         Window_Style_Check = QAction(QIcon(
-            f'img/appIcon/{self.Puretheme}/brand-windows.svg'), 'Window 风格 (浮动窗口)', self)
-        Window_Style_Check.iconPath = 'brand-windows.svg'
+            f'img/appIcon/{self.Puretheme}/sys_Window.svg'), 'Window 风格 (浮动窗口)', self)
+        Window_Style_Check.iconPath = 'sys_Window.svg'
         self.changeIconList.append(Window_Style_Check)
         Window_Style_Check.triggered.connect(self.USE_WINDOW_STYLE)
         view.addAction(Window_Style_Check)
@@ -779,51 +984,62 @@ QDockWidget::float-button {
         self.menubar_.addMenu(view)
 
         ################################
-        tools = PureRoundedBorderMenu('工具(T)', self.menubar_)
+        tools = PureRoundedBorderMenu('工具(&T)', self.menubar_)
         tools.setFixedWidth(250)
         TOOL = ['渲染窗口', '方块列表',
                 '查看源代码 (python)', 'bat脚本', 'Mineways (./scripts)']
         HVIEW_FUNC = [print, print,
                       print, print, self.openMineWays]
-        ICON_tool = ['img/toolbar/d_Profiler.Rendering@2x.png',
-                     'img/toolbar/d_Profiler.NetworkMessages@2x.png',
-                     'img/toolbar/d_UnityEditor.ConsoleWindow@2x.png',
-                     'img/toolbar/d_UnityEditor.ConsoleWindow@2x.png',
-                     'img/toolbar/d_SceneViewTools@2x.png']
+        ICON_tool = [f'img/appIcon/{self.Puretheme}/camera_data.svg',
+                     f'img/appIcon/{self.Puretheme}/cube.svg',
+                     f'img/appIcon/{self.Puretheme}/text.svg',
+                     f'img/appIcon/{self.Puretheme}/text.svg',
+                     f'img/appIcon/{self.Puretheme}/experimental.svg',]
         for i in range(len(TOOL)):
             Act = QAction(TOOL[i], self)
             Act.setIcon(QIcon(ICON_tool[i]))
+            Act.iconPath = ICON_tool[i].split('/')[-1]
+            self.changeIconList.append(Act)
             Act.triggered.connect(HVIEW_FUNC[i])
             tools.addAction(Act)
         tools.addSeparator()
-        more_tools = QMenu('Plugins (./SV_plugins)', tools)
-        more_tools.setIcon(QIcon('img/toolbar/d_SceneViewTools@2x.png'))
+        more_tools = PureRoundedBorderMenu('Plugins (./SV_plugins)', tools)
+        more_tools.setIcon(QIcon(f'img/appIcon/{self.Puretheme}/text.svg'))
+        more_tools.iconPath = 'text.svg'
+        self.changeIconList.append(more_tools)
         tools.addMenu(more_tools)
         for root, dirs, files in os.walk('./SV_plugins'):
             plugins = files
         for pluginFile in plugins:
-            plugIcon = QIcon('img/toolbar/d_winbtn_win_max@2x.png')
+            iconpath = f'img/appIcon/{self.Puretheme}/file.svg'
             if pluginFile.split('.')[-1] == 'py':
-                plugIcon = QIcon('img/fileTypeIcon/high-contrast/py.svg')
-            elif pluginFile.split('.')[-1] == 'lua':
-                plugIcon = QIcon('img/fileTypeIcon/high-contrast/lua.svg')
-
+                iconpath = f'img/appIcon/{self.Puretheme}/file_script.svg'
+            plugIcon = QIcon(iconpath)
             globals()[pluginFile+'_menu'] = QAction(
                 plugIcon, pluginFile, self)
+            globals()[pluginFile+'_menu'].iconPath = iconpath.split('/')[-1]
+            self.changeIconList.append(globals()[pluginFile+'_menu'])
             more_tools.addAction(globals()[pluginFile+'_menu'])
         self.menubar_.addMenu(tools)
 
         ################################
-        setting = PureRoundedBorderMenu('设置(S)', self.menubar_)
+        setting = PureRoundedBorderMenu('设置(&S)', self.menubar_)
         setting.setFixedWidth(250)
-        SETTING = ['偏好设置 (Preference)', None, '界面较小尺寸 (700x450)', '界面适中尺寸1 (1000x600)',
-                   '界面适中尺寸2 (1050x650)', '界面较大尺寸 (1200x750)', None,
-                   '软件居中', '软件全屏 (Fullscreen)', '退出全屏']
+        SETTING = ['偏好设置 (Preference)', None, '界面较小尺寸 (700x450)', '界面适中尺寸1 (950x600)',
+                   '界面适中尺寸2 (1000x650)', '界面较大尺寸 (1100x750)', None,
+                   '软件居中', '软件全屏', '退出全屏']
         SETTING_FUNC = [self.setting, None, self.resizeApp, self.resizeApp_2, self.resizeApp_2_2, self.resizeApp_3, None,
                         self.centralApp, self.fullScreenApp, self.outFullScreen]
-        ICON_3 = ['img/toolbar/d_Settings@2x.png', None, 'img/toolbar/d_Profiler.UIDetails@2x.png', 'img/toolbar/d_Profiler.UIDetails@2x.png',
-                  'img/toolbar/d_Profiler.UIDetails@2x.png', 'img/toolbar/d_Profiler.UIDetails@2x.png', None, 'img/toolbar/d_winbtn_win_restore_h@2x.png',
-                  'img/toolbar/d_winbtn_win_restore_h@2x.png', 'img/toolbar/d_winbtn_win_restore_h@2x.png']
+        ICON_3 = [f'img/appIcon/{self.Puretheme}/preferences.svg',
+                  None,
+                  f'img/appIcon/{self.Puretheme}/window.svg',
+                  f'img/appIcon/{self.Puretheme}/window.svg',
+                  f'img/appIcon/{self.Puretheme}/window.svg',
+                  f'img/appIcon/{self.Puretheme}/window.svg',
+                  None,
+                  f'img/appIcon/{self.Puretheme}/snap_face_center.svg',
+                  f'img/appIcon/{self.Puretheme}/fullscreen_enter.svg',
+                  f'img/appIcon/{self.Puretheme}/fullscreen_exit.svg',]
         for i in range(len(SETTING)):
             if SETTING[i] == None:
                 setting.addSeparator()
@@ -831,27 +1047,38 @@ QDockWidget::float-button {
                 Act = QAction(SETTING[i], self)
                 Act.triggered.connect(SETTING_FUNC[i])
                 Act.setIcon(QIcon(ICON_3[i]))
+                Act.iconPath = ICON_3[i].split('/')[-1]
+                self.changeIconList.append(Act)
                 setting.addAction(Act)
         self.menubar_.addMenu(setting)
 
         ################################
-        help = PureRoundedBorderMenu('帮助(H)', self.menubar_)
+        help = PureRoundedBorderMenu('帮助(&H)', self.menubar_)
         help.setFixedWidth(250)
         HELP = ['我们的网站', '帮助文档', '关于PyQt5',  '关于我们(About us)', '版本',]
         HELP_FUNC = [self.our_website,
                      self.help_document, self.Tool_about_PyQt, self.Tool_about_APP, print]
         # self.Tool_about_APP, self.startPage
-        ICON_4 = ['img/toolbar/d_BuildSettings.Web.Small.png', 'img/toolbar/d__Help@2x.png',
-                  'img/toolbar/d__Help@2x.png', 'img/toolbar/d__Help@2x.png', 'img/toolbar/d_BuildSettings.Standalone.png']
+        ICON_4 = [f'img/appIcon/{self.Puretheme}/url.svg',
+                  f'img/appIcon/{self.Puretheme}/url.svg',
+                  f'img/appIcon/{self.Puretheme}/Qt_logo_neon_2022.svg.png',
+                  f'img/appIcon/{self.Puretheme}/window.svg',
+                  f'img/appIcon/{self.Puretheme}/restrict_view_off.svg',]
         for i in range(len(HELP)):
             Act = QAction(HELP[i], self)
             Act.triggered.connect(HELP_FUNC[i])
             Act.setIcon(QIcon(ICON_4[i]))
+            Act.iconPath = ICON_4[i].split('/')[-1]
+            self.changeIconList.append(Act)
             help.addAction(Act)
         self.menubar_.addMenu(help)
 
         # license
         license = PureRoundedBorderMenu('查看开源许可证 (License)', help)
+        license.setIcon(
+            QIcon(f'img/appIcon/{self.Puretheme}/file.svg'))
+        license.iconPath = 'file.svg'
+        self.changeIconList.append(license)
         help.addMenu(license)
         for root, dirs, files in os.walk('./license'):
             get_license = files
@@ -865,7 +1092,8 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
     with open('./license/{license_file}', 'r', encoding='utf-8') as license:
         this_str = license.read()
     globals()['license_WINDOW_'+str(globals()['window_count'])] = QMainWindow()
-    license_WINDOW = globals()['license_WINDOW_'+str(globals()['window_count'])]
+    license_WINDOW = globals()['license_WINDOW_'+ \
+                             str(globals()['window_count'])]
     license_WINDOW.resize(400, 504)
     license_WINDOW.setWindowTitle('{license_file}')
     license_WINDOW.setStyleSheet('font-family: auto;')
@@ -888,12 +1116,14 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             exec(this_open_function)
             globals()[(license_file.split('-')[0]+'_license').replace(' ', '_').replace(']', '_').replace('[', '_')
                       ] = locals()[(license_file.split('-')[0]+'_license').replace(' ', '_').replace(']', '_').replace('[', '_')]
-            license.setIcon(
-                QIcon('img/toolbar/d_UnityEditor.ConsoleWindow@2x.png'))
             globals()[license_file +
                       '_menu'].triggered.connect(globals()[(license_file.split('-')[0]+'_license').replace(' ', '_').replace(']', '_').replace('[', '_')])
             globals()[license_file +
-                      '_menu'].setIcon(QIcon('img/toolbar/d_UnityEditor.ConsoleWindow@2x.png'))
+                      '_menu'].setIcon(QIcon(f'img/appIcon/{self.Puretheme}/file.svg'))
+            globals()[license_file +
+                      '_menu'].iconPath = 'file.svg'
+            self.changeIconList.append(globals()[license_file +
+                                                 '_menu'])
             license.addAction(globals()[license_file+'_menu'])
 
     def AboutPage(self):
@@ -901,7 +1131,7 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
         # 创建一个菜单
         self.start_w = 600
         self.start_h = 300
-        self.startWindow = PAboutWidget(self, 600, 300)
+        self.startWindow = PAboutWidget(self, 680, 340)
         # 将对话框移动到主窗口的中央
         main_window_rect = self.geometry()
         self.startWindow.move(main_window_rect.center() -
@@ -946,20 +1176,29 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
         self.resize(700, 450)
 
     def resizeApp_2(self):
-        self.resize(1000, 600)
-        self.resize(1000, 600)
+        self.resize(950, 600)
+        self.resize(950, 600)
 
     def resizeApp_2_2(self):
-        self.resize(1050, 650)
-        self.resize(1050, 650)
+        self.resize(1000, 650)
+        self.resize(1000, 650)
 
     def resizeApp_3(self):
-        self.resize(1200, 750)
-        self.resize(1200, 750)
+        self.resize(1100, 750)
+        self.resize(1100, 750)
 
     def setting(self):
-        settingWindow = SettingWindow(self, self.app)
-        pass
+        # 导入设置
+        preferences_window = NewFramelessWindow(self)
+        preferences_window.setWindowTitle('偏好设置')
+        preferences_window.setWindowIcon(
+            QIcon('img/appIcon/dark/preferences.svg'))
+        setting_widget = _Settings(self, self, self.openPath)
+        setting_widget._mainwidget_.setStyleSheet(
+            '#MainWidget {border-radius:0px !important;}')
+        preferences_window.MainLayout.addWidget(
+            setting_widget)
+        preferences_window.show()
 
     def SetWindowFixSizeUsed(self, state):
         if state:
@@ -995,7 +1234,8 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             self.BorderColor = '#4a4a4a'
         self.thisTheme = theme
         self.themeIndex = themeIndex
-        print('Theme :', theme)
+        print(Color.YELLOW, '[system] : Set Theme :', theme, Color.END)
+
         # 设置基础主题
         if theme == 'dark':
             # dark theme
@@ -1013,7 +1253,7 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             palette.setColor(QPalette.Link, QColor(71, 114, 179))
             palette.setColor(QPalette.Highlight, QColor(71, 114, 179))
             palette.setColor(QPalette.HighlightedText, Qt.black)
-            App.setPalette(palette)
+            self.setPalette(palette)
             # change Icon color
             # 模拟器3D视图修改背景色-dark
             for vtkViewer in self.Simulator_vtk:
@@ -1042,7 +1282,7 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             palette.setColor(QPalette.Link, QColor(95, 133, 193))
             palette.setColor(QPalette.Highlight, QColor(95, 133, 193))
             palette.setColor(QPalette.HighlightedText, Qt.white)
-            App.setPalette(palette)
+            self.setPalette(palette)
             # 模拟器3D视图修改背景色-light
             for vtkViewer in self.Simulator_vtk:
                 vtkViewer.selectionchange(False, 'light')
@@ -1072,7 +1312,7 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             palette.setColor(QPalette.Link, QColor(200, 81, 48))
             palette.setColor(QPalette.Highlight, QColor(200, 81, 48))
             palette.setColor(QPalette.HighlightedText, Qt.black)
-            App.setPalette(palette)
+            self.setPalette(palette)
             # 模拟器3D视图修改背景色-gray
             for vtkViewer in self.Simulator_vtk:
                 vtkViewer.selectionchange(False, 'gray')
@@ -1115,6 +1355,68 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
                 changeTheme_widget.changeTheme(self.themeIndex)
             except:
                 pass
+
+        if self.appMode == 'Frameless':
+            if themeIndex == 0:
+                # dark
+                self.titleBar.setStyleSheet(
+                    '#CustomTitleBar{background-color: #1d1d1d;}')
+                self.spaceWidget.setStyleSheet(
+                    '#spaceWidget{background-color: #1d1d1d;}')
+                self.tabWidget.setStyleSheet(
+                    'background-color: #1d1d1d;')
+                # min
+                self.titleBar.minBtn.setNormalColor(Qt.white)
+                self.titleBar.minBtn.setNormalBackgroundColor(
+                    QColor('#1d1d1d'))
+                # max
+                self.titleBar.maxBtn.setNormalColor(Qt.white)
+                self.titleBar.maxBtn.setNormalBackgroundColor(
+                    QColor('#1d1d1d'))
+                # clsoe
+                self.titleBar.closeBtn.setNormalColor(Qt.white)
+                self.titleBar.closeBtn.setNormalBackgroundColor(
+                    QColor('#1d1d1d'))
+            elif themeIndex == 1:
+                # light
+                self.titleBar.setStyleSheet(
+                    '#CustomTitleBar{background-color: #ABABAB;}')
+                self.spaceWidget.setStyleSheet(
+                    '#spaceWidget{background-color: #ABABAB;}')
+                self.tabWidget.setStyleSheet(
+                    'background-color: #ABABAB;')
+                # min
+                self.titleBar.minBtn.setNormalColor(Qt.black)
+                self.titleBar.minBtn.setNormalBackgroundColor(
+                    QColor('#ABABAB'))
+                # max
+                self.titleBar.maxBtn.setNormalColor(Qt.black)
+                self.titleBar.maxBtn.setNormalBackgroundColor(
+                    QColor('#ABABAB'))
+                # clsoe
+                self.titleBar.closeBtn.setNormalColor(Qt.black)
+                self.titleBar.closeBtn.setNormalBackgroundColor(
+                    QColor('#ABABAB'))
+            else:
+                # gray
+                self.titleBar.setStyleSheet(
+                    '#CustomTitleBar{background-color: #4c4c4c;}')
+                self.spaceWidget.setStyleSheet(
+                    '#spaceWidget{background-color: #4c4c4c;}')
+                self.tabWidget.setStyleSheet(
+                    'background-color: #4c4c4c;')
+                # min
+                self.titleBar.minBtn.setNormalColor(Qt.white)
+                self.titleBar.minBtn.setNormalBackgroundColor(
+                    QColor('#4c4c4c'))
+                # max
+                self.titleBar.maxBtn.setNormalColor(Qt.white)
+                self.titleBar.maxBtn.setNormalBackgroundColor(
+                    QColor('#4c4c4c'))
+                # clsoe
+                self.titleBar.closeBtn.setNormalColor(Qt.white)
+                self.titleBar.closeBtn.setNormalBackgroundColor(
+                    QColor('#4c4c4c'))
 
         # 设置 QSS 样式
         if self.DockStyle == 'Window':
@@ -1214,13 +1516,18 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
         self.changeIconList.append(self.wheelMove)
         # LABEL
         status_bar.addPermanentWidget(QWidget(), 2)
+        # 创建内存获取线程并启动
+        self.memory_thread = MemoryThread()
+        self.memory_thread.memory_update.connect(self.update_memory)
+        self.memory_thread.start()
         # label 2
         self.label_2 = QPushButton()
-        self.label_2.setIcon(QIcon('./img/svg/app-window-filled.svg'))
-        self.label_2.setText('0.0.1 beta (ui:3 core:5)')
         self.label_2.setObjectName('statusButton')
-        self.label_2.setIconSize(QSize(16, 16))
+        self.label_2.setText('内存: None MB | 0.0.2 beta')
         status_bar.addPermanentWidget(self.label_2, 0)
+
+    def update_memory(self, memory_MB):
+        self.label_2.setText(f'内存: {memory_MB:.2f} MB | 0.0.2 beta')
 
     def expand_tree_widget_items(self, tree_widget):
         root_item = tree_widget.invisibleRootItem()
@@ -1234,7 +1541,7 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             child_item = item.child(i)
             self.expand_tree_item(child_item)
 
-    def runObjects(self, nbtData):
+    def runObjects(self, nbtData, filePath):
         '''
         from SV 0.0.2
         '''
@@ -1243,29 +1550,30 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             objectView.clear()
             objectView.LastPickerActor = None  # 清空状态:上一个拾取
             # set style end
-            fileType = self.filePath.split('/')[-1].split('.')[-1]
+            _, fileType = os.path.splitext(filePath)
             worldType = '[UnkownWorldType]'
             Size = 'size:[0,0]'
-            if fileType == 'nbt':
+            if fileType == '.nbt':
                 worldType = 'Nbt'
-                Size = f'size:[{str(int(nbtData["size"][0]))},{str(int(nbtData["size"][1]))},{str(int(nbtData["size"][2]))}]'
-            elif fileType == 'mca':
+                Size = f'size : NBT[ x:{str(int(nbtData["size"][0]))} , y:{str(int(nbtData["size"][1]))} , z:{str(int(nbtData["size"][2]))} ]'
+            elif fileType == '.mca':
                 worldType = 'Region'
-                Size = f'size:[{str(len(nbtData))} chunks]'
+                Size = f'size : MCA[{str(len(nbtData))} chunks]'
             world = QTreeWidgetItem(objectView)
             world.setText(0, worldType + ' ' + Size)
-            world.setIcon(0, QIcon('img/toolbar/d_ToolHandleLocal@2x.png'))
+            world.setIcon(
+                0, QIcon('img/toolbar/d_ToolHandleLocal@2x.png'))
             # world.setCheckState(0, Qt.Checked)
             # add node
             objectView.addTopLevelItem(world)
             # if mca or nbt
-            if fileType == 'mca':
+            if fileType == '.mca':
                 for chunkName in nbtData:
                     chunk = QTreeWidgetItem()
                     chunk.setText(0, 'chunk '+chunkName)
                     chunk.setIcon(0, QIcon('./img/3d_orange.svg'))
                     world.addChild(chunk)
-            elif fileType == 'nbt':
+            elif fileType == '.nbt':
                 try:
                     for blockType in nbtData['palette']:
                         block = QTreeWidgetItem()
@@ -1278,6 +1586,51 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
             # 点击事件
             objectView.itemClicked.connect(self.on_item_clicked)
             self.expendFunc.expendSingal.emit(world)
+
+    def LoadObjectInOneWindow(self, nbtData, filePath, objTree):
+        '''
+        在一个窗口内加载object
+        '''
+        objectView = objTree
+        objectView.clear()
+        objectView.LastPickerActor = None  # 清空状态:上一个拾取
+        # set style end
+        _, fileType = os.path.splitext(filePath)
+        worldType = '[UnkownWorldType]'
+        Size = 'size:[0,0]'
+        if fileType == '.nbt':
+            worldType = 'Nbt'
+            Size = f'size : NBT [ x:{str(int(nbtData["size"][0]))} , y:{str(int(nbtData["size"][1]))} , z:{str(int(nbtData["size"][2]))} ]'
+        elif fileType == '.mca':
+            worldType = 'Region'
+            Size = f'size : MCA [ {str(len(nbtData))} chunks ]'
+        world = QTreeWidgetItem(objectView)
+        world.setText(0, worldType + ' ' + Size)
+        world.setIcon(0, QIcon('img/toolbar/d_ToolHandleLocal@2x.png'))
+        print(world)
+        # world.setCheckState(0, Qt.Checked)
+        # add node
+        objectView.addTopLevelItem(world)
+        # if mca or nbt
+        if fileType == '.mca':
+            for chunkName in nbtData:
+                chunk = QTreeWidgetItem()
+                chunk.setText(0, 'chunk '+chunkName)
+                chunk.setIcon(0, QIcon('./img/3d_orange.svg'))
+                world.addChild(chunk)
+        elif fileType == '.nbt':
+            try:
+                for blockType in nbtData['palette']:
+                    block = QTreeWidgetItem()
+                    block.setText(0, blockType['Name'])
+                    block.setIcon(0, QIcon('./img/3d.svg'))
+                    world.addChild(block)
+            except Exception:
+                print('[NBT error] : function-runObjects', nbtData,
+                      traceback.format_exc())
+        # 点击事件
+        objectView.itemClicked.connect(self.on_item_clicked)
+        self.expendFunc.expendSingal.emit(world)
 
     def expend_singal(self, node):
         node.setExpanded(True)
@@ -1319,7 +1672,6 @@ def {(license_file.split('-')[0]+'_license').replace(' ','_').replace(']','_').r
 ##############################################################################
 '''
 
-
 QFontDatabase.addApplicationFont('./font/zpix.ttf')
 QWebEngineSettings.globalSettings().setAttribute(
     QWebEngineSettings.PluginsEnabled, True)
@@ -1327,12 +1679,26 @@ QWebEngineSettings.globalSettings().setAttribute(
     QWebEngineSettings.ScreenCaptureEnabled, True)
 App.setStyle("Fusion")
 
-# Fusion dark palette from https://gist.github.com/QuantumCD/6245215.
-# setting'''
-StructureViewerApp = StructureViewer(App, os.getcwd().replace('\\', '/'), None)
-StructureViewerApp.PostValueToTerminal()
-StructureViewerApp.showStartWindow()
-# 恢复全局参数
-# StructureStudioApp._RECOVER_GLOBALS_ENVIRONMENT_TO_CONSOLE_()
 
+def OpenAPP(Mode: str = 'native') -> None:
+    # Fusion dark palette from https://gist.github.com/QuantumCD/6245215.
+    if Mode == 'Frameless':
+        FramelessStructureViewer = type(
+            'StructureViewer', (FramelessMainWindow,), dict(StructureViewer.__dict__))
+        StructureViewerApp = FramelessStructureViewer(
+            App, Mode, os.getcwd().replace('\\', '/'), None)
+        StructureViewerApp.PostValueToTerminal()
+        StructureViewerApp.showStartWindow()
+    else:
+        StructureViewerApp = StructureViewer(
+            App, Mode, os.getcwd().replace('\\', '/'), None)
+        StructureViewerApp.PostValueToTerminal()
+        StructureViewerApp.showStartWindow()
+    # 恢复全局参数
+    # StructureStudioApp._RECOVER_GLOBALS_ENVIRONMENT_TO_CONSOLE_()
+
+
+# 'Frameless'
+OpenAPP('Frameless')
+# 进行性能检查
 sys.exit(App.exec())

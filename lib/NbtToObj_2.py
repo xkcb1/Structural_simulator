@@ -37,8 +37,8 @@ def get_3d_model_viewer(self, NbtPath: str, removeMwscript: bool = True, UseText
     Nbt_Block = Nbt_File['blocks']
     Nbt_Size = Nbt_File['size']
     x = int(Nbt_Size[0])
-    y = int(Nbt_Size[0])
-    z = int(Nbt_Size[0])
+    y = int(Nbt_Size[1])
+    z = int(Nbt_Size[2])
     # make 2 file path
     mwscriptPath = path + plainName + '.mwscript'
     pngScirptPath = path + plainName+'_png' + '.mwscript'
@@ -51,7 +51,7 @@ Minecraft world: {_PureWorld_}
 Set render type: Wavefront OBJ absolute indices
 Units for the model vertex data itself: meters
 // {datetime.datetime.now()}
-Selection location min to max: 0,0,0 to 48,48,48
+Selection location min to max: 0,0,0 to {x},{y},{z}
 File type: Export full color texture patterns
 Texture output RGB: YES
 Texture output A: YES

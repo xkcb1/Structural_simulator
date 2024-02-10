@@ -13,7 +13,7 @@ class viewButtonWidget(QFrame):
         self.setStyleSheet(f'''
 #viewButtonWidget {{
     background-color: {self._parent_.BgColor};
-    border-radius: 2px !important;
+    border-radius: 0px !important;
     border:2px solid {self._parent_.BorderColor} !important;
 }}
 ''')
@@ -26,7 +26,7 @@ class viewButtonWidget(QFrame):
         self.setStyleSheet(f'''
 #viewButtonWidget {{
     background-color: {self._parent_.BgColor};
-    border-radius: 2px !important;
+    border-radius: 0px !important;
     border:2px solid {self._parent_.ThemeColor} !important;
 }}
 ''')
@@ -39,7 +39,7 @@ class viewButtonWidget(QFrame):
         self.setStyleSheet(f'''
 #viewButtonWidget {{
     background-color: {self._parent_.BgColor};
-    border-radius: 2px !important;
+    border-radius: 0px !important;
     border:2px solid {self._parent_.BorderColor} !important;
 }}
 ''')
@@ -51,7 +51,7 @@ class viewButtonWidget(QFrame):
         self.setStyleSheet(f'''
 #viewButtonWidget {{
     background-color: {self._parent_.BgColor};
-    border-radius: 2px !important;
+    border-radius: 0px !important;
     border:2px solid {self._parent_.BorderColor} !important;
 }}
 ''')

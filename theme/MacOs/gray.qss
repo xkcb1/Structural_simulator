@@ -84,7 +84,11 @@ QLineEdit:hover {
     border: 1px solid #252525;
 }
 /*combobox*/
-
+QToolButton::menu-indicator {
+    image: url(img/downarrow_hlt_dark.svg);
+    width: 15px;
+    height: 15px;
+}
 QComboBox,
 #Choose_Window,
 QToolButton {

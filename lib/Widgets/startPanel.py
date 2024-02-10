@@ -239,18 +239,18 @@ class PAboutWidget(QDialog):
         self.license = 'GNU GPL-3.0'
         #
         icon = QPushButton()
-        icon.resize(200, 200)
-        icon.setFixedSize(200, 200)
+        icon.resize(250, 250)
+        icon.setFixedSize(250, 250)
         icon.setIcon(QIcon('./img/mcEarth_black_40.png'))
-        icon.setIconSize(QSize(200, 200))
+        icon.setIconSize(QSize(250, 250))
         icon.setStyleSheet(
             'background-color: rgba(0,0,0,0);border:0px !important;')
         #
         self.ThisLayout.addWidget(icon)
         TopLayout = QHBoxLayout()
-        Title = QLabel('Structure studio 0.0.1')
+        Title = QLabel('Structure studio 0.0.2')
         Title.setStyleSheet(
-            'border: 0px;background-color: rgba(0,0,0,0);font-family:微软雅黑;font-size:30px;font-weight:bold;')
+            'border: 0px;background-color: rgba(0,0,0,0);font-family:Segoe UI;font-size:32px;font-weight:bold;')
         TopLayout.addWidget(Title)
         # project面板
         project = QWidget()
@@ -321,8 +321,26 @@ class PAboutWidget(QDialog):
         # 6
         _project_PureSV_ = QPushButton()
         _project_PureSV_.setObjectName('ButtonMenuBar')
-        _project_PureSV_.setText('Structure Tools')
+        _project_PureSV_.setText('Structure Viewer')
         _project_PureSV_.setIcon(
             QIcon('img/appIcon_2.png'))
         _project_PureSV_.setStyleSheet('QPushButton {text-align:left;}')
         projectLayout.addWidget(_project_PureSV_, 3, 1)
+
+        # 7
+        _project_MineWays_ = QPushButton()
+        _project_MineWays_.setObjectName('ButtonMenuBar')
+        _project_MineWays_.setText('Mineways')
+        _project_MineWays_.setIcon(
+            QIcon('img/mineways.ico'))
+        _project_MineWays_.setStyleSheet('QPushButton {text-align:left;}')
+        projectLayout.addWidget(_project_MineWays_, 4, 0)
+
+        # 8
+        _project_Frameless_ = QPushButton()
+        _project_Frameless_.setObjectName('ButtonMenuBar')
+        _project_Frameless_.setText('Frameless Window')
+        _project_Frameless_.setIcon(
+            QIcon('img/Frameless.png'))
+        _project_Frameless_.setStyleSheet('QPushButton {text-align:left;}')
+        projectLayout.addWidget(_project_Frameless_, 4, 1)

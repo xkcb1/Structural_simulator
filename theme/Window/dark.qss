@@ -20,22 +20,28 @@ QLineEdit {
     color: #FFFFFF;
 }
 /*combobox*/
-QComboBox,#Choose_Window,QToolButton {
+QToolButton::menu-indicator {
+    image: url(img/downarrow_hlt_dark.svg);
+    width: 15px;
+    height: 15px;
+}
+QComboBox,QToolButton {
     background-color: #282828;
     border-radius: 4px;
     border: 1px solid #3d3d3d; 
 }
 
-QComboBox:hover,#Choose_Window:hover,QToolButton:hover {
+QComboBox:hover,QToolButton:hover {
     background-color: #303030;
     border: 1px solid #464646;
 }
-QComboBox:pressed,#Choose_Window:pressed,QToolButton:pressed {
+QComboBox:pressed,QToolButton:pressed {
     background-color: #42608D;
     border-color: #42608D;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
+
 QComboBox:focus,
 QComboBox:open {
     background-color: #405E8C;
